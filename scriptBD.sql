@@ -9,11 +9,11 @@ partido VARCHAR(100)
 
 Insert Into candidatos (nome, numero, partido)
 VALUES ('Marina',  15, 'PTBS'), 
-	   ('Matheus', 17, 'ASDT'),
-       ('Rafae', 12, 'JTPO');
+	('Matheus', 17, 'ASDT'),
+       ('Rafael', 12, 'JTPO');
 
 
-CREATE TABLE eleitor(
+CREATE TABLE eleitores(
 id INT AUTO_INCREMENT PRIMARY KEY,
 nome VARCHAR(100) NOT NULL,
 cpf INT(11) UNIQUE NOT NULL,
