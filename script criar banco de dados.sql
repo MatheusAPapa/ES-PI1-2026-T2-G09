@@ -7,6 +7,11 @@ numero INT UNIQUE,
 partido VARCHAR(100)
 );
 
+Insert Into candidatos (nome, numero, partido)
+VALUES ('Marina',  15, 'PTBS'), 
+	   ('Matheus', 17, 'ASDT'),
+       ('Rafae', 12, 'JTPO');
+
 
 CREATE TABLE eleitor(
 id INT AUTO_INCREMENT PRIMARY KEY,
