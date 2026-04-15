@@ -17,12 +17,14 @@ CREATE TABLE eleitores(
 id INT AUTO_INCREMENT PRIMARY KEY,
 nome VARCHAR(100) NOT NULL,
 cpf INT(11) UNIQUE NOT NULL,
-numemro_titulo INT UNIQUE NOT NULL,
-chave_de_acesso INT(4),
+numero_titulo INT UNIQUE NOT NULL,
 mesario BOOLEAN DEFAULT FALSE,
 status_de_voto BOOLEAN DEFAULT FALSE
 );
-
+ALTER TABLE eleitores
+ADD COLUMN chave_de_acesso VARCHAR(7) NOT NULL,
+ADD CONSTRAINT chk_codigo_formato 
+CHECK (codigo REGEXP '^[A-Za-z]{3}[0-9]{4}$');
 
 CREATE TABLE votos(
 id INT AUTO_INCREMENT PRIMARY KEY,

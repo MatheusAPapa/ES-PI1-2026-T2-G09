@@ -1,6 +1,7 @@
 import mysql.connector
 import navegacaoModVotacao
 import menus
+from cadastroEleitor import cadastrar_novo_eleitor
 
 escolha = 0
 while escolha != 3:
@@ -12,8 +13,7 @@ while escolha != 3:
             match opcao:
                 #cadastro de novo eleitor
                 case 1:
-                    print('cadastrar de novo eleitor')
-                    break
+                    cadastrar_novo_eleitor()
                 #editar dados do eleitor
                 case 2:
                     print('editar dados do eleitor')
