@@ -3,6 +3,7 @@ import os
 import menus
 import navegacaoModVotacao
 import funcoesEleitor
+import verificacoes
 
 escolha = 0
 while escolha != 3:
@@ -22,6 +23,8 @@ while escolha != 3:
                     nome_eleitor = str(input('Informe o nome do eleitor: '))
                     titulo_eleitor = str(input('Informe o título de eleitor: '))
                     cpf = str(input('Informe o CPF do eleitor: '))
+                    while verificacoes.verificarCPF(cpf) == False:
+                            cpf = str(input('Informe o CPF do eleitor: '))
                     mesario = str(input('Informe se o mesário será eleitor [S/N]: '))
                     if mesario in ['s', 'S', 'sim', 'Sim']:
                         mesario = True
