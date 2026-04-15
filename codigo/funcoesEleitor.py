@@ -1,0 +1,44 @@
+import conexaobd
+import random
+
+def gerar_chave_acesso(nome):
+    """Gera a chave de acesso no formato solicitado a partir do nome do eleitor"""
+
+    #remove os espaços e sapara as palavras em listas
+    partes = nome.strip().split()
+    
+    # Duas primeiras letras do primeiro nome e deixa em maiúsculo
+    primeiro_nome = partes[0][:2].upper()
+    
+    # Primeira letra do segundo nome (se existir)
+    if len(partes) >= 2:
+        segunda_letra = partes[1][0].upper()
+    else:
+        segunda_letra = "X"   # caso tenha apenas um nome
+    
+    # gera os 4 dígitos aleatórios da chave de acesso
+    numeros = ''.join(str(random.randint(1000, 9999)))
+    
+    chave = primeiro_nome + segunda_letra + numeros
+    return chave
+
+def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
+    #gerando a cheve de acesso do eleitor
+    chave_acesso = gerar_chave_acesso(nome)
+
+    # Inserindo no banco de dados os dados do eleitor
+    sql = "INSERT INTO eleitores (nome, cpf, numero_titulo, mesario, chave_acesso) VALUES (%s, %s, %s, %s, %s)"
+    valores = (nome, cpf, numero_titulo, mesario, chave_acesso)
+    conexaobd.cursor.execute(sql, valores)
+    conexaobd.conexao.commit()
+    
+    print("\n=====================================")
+    print("✅ ELEITOR CADASTRADO COM SUCESSO!")
+    print("=====================================\n")
+    print(f"Nome: {nome}")
+    print(f"Título: {numero_titulo}")
+    print(f"CPF: {cpf}")
+    print(f"Chave de acesso: {chave_acesso}")
+    print(f"Mesário: {'Sim' if mesario else 'Não'}")
+    input("\nPressione Enter para voltar a tela inicial...")
+

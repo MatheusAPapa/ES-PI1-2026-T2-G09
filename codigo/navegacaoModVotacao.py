@@ -1,4 +1,4 @@
-import menus
+import menus as menus
 
 def modAuditoria():
     opcaoAudVota = menus.menuAudVota()
