@@ -1,3 +1,4 @@
+import mysql.connector
 import conexaobd
 import random
 
@@ -27,18 +28,41 @@ def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
     chave_acesso = gerar_chave_acesso(nome)
 
     # Inserindo no banco de dados os dados do eleitor
-    sql = "INSERT INTO eleitores (nome, cpf, numero_titulo, mesario, chave_acesso) VALUES (%s, %s, %s, %s, %s)"
-    valores = (nome, cpf, numero_titulo, mesario, chave_acesso)
-    conexaobd.cursor.execute(sql, valores)
-    conexaobd.conexao.commit()
+    try: 
+        sql = "INSERT INTO eleitores (nome, cpf, numero_titulo, mesario, chave_acesso) VALUES (%s, %s, %s, %s, %s)"
+        valores = (nome, cpf, numero_titulo, mesario, chave_acesso)
+        conexaobd.cursor.execute(sql, valores)
+        conexaobd.conexao.commit()
+        
+        print("\n=====================================")
+        print("✅ ELEITOR CADASTRADO COM SUCESSO!")
+        print("=====================================\n")
+        print(f"Nome: {nome}")
+        print(f"Título: {numero_titulo}")
+        print(f"CPF: {cpf}")
+        print(f"Chave de acesso: {chave_acesso}")
+        print(f"Mesário: {'Sim' if mesario else 'Não'}")
+        input("\nPressione Enter para voltar a tela inicial...")
     
-    print("\n=====================================")
-    print("✅ ELEITOR CADASTRADO COM SUCESSO!")
-    print("=====================================\n")
-    print(f"Nome: {nome}")
-    print(f"Título: {numero_titulo}")
-    print(f"CPF: {cpf}")
-    print(f"Chave de acesso: {chave_acesso}")
-    print(f"Mesário: {'Sim' if mesario else 'Não'}")
-    input("\nPressione Enter para voltar a tela inicial...")
+    except mysql.connector.IntegrityError as err:
+        if "Duplicate entry" in str(err):
+            #verificando duplicidade do cpf
+            if "cpf" in str(err).lower():
+                print("\n❌ Erro: Este CPF já está cadastrado no sistema!")
+                input("\nPressione Enter para voltar a tela inicial...")
+                
+            #verificando duplicidade de título de eleitor
+            if "numero_titulo" in str(err).lower():
+                print("\n❌ Erro: Este título de eleitor já está cadastrado no sistema!")
+                input("\nPressione Enter para voltar a tela inicial...")
+        else:
+            print(f"\n❌ Erro: {err}")
+            
+    except mysql.connector.Error as err:
+        print(f"\n❌ Erro ao cadastrar no banco de dados: {err}")
+        input("\nPressione Enter para voltar a tela inicial...")
 
+    finally:
+        if 'conn' in locals() and conexaobd.conexao.is_connected():
+            conexaobd.cursor.close()
+            conexaobd.conexao.close()
