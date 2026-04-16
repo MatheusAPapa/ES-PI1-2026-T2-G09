@@ -46,14 +46,22 @@ def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
     
     except mysql.connector.IntegrityError as err:
         if "Duplicate entry" in str(err):
+            #verificando duplicidade do cpf
             if "cpf" in str(err).lower():
                 print("\n❌ Erro: Este CPF já está cadastrado no sistema!")
                 input("\nPressione Enter para voltar a tela inicial...")
+                
+            #verificando duplicidade de título de eleitor
+            if "numero_titulo" in str(err).lower():
+                print("\n❌ Erro: Este título de eleitor já está cadastrado no sistema!")
+                input("\nPressione Enter para voltar a tela inicial...")
         else:
             print(f"\n❌ Erro: {err}")
+            
     except mysql.connector.Error as err:
         print(f"\n❌ Erro ao cadastrar no banco de dados: {err}")
         input("\nPressione Enter para voltar a tela inicial...")
+
     finally:
         if 'conn' in locals() and conexaobd.conexao.is_connected():
             conexaobd.cursor.close()
