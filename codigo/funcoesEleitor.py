@@ -71,3 +71,8 @@ def listar_eleitores():
     conexaobd.cursor.execute('SELECT id, nome, mesario, status_de_voto FROM eleitores')
     for (id, nome, mesario, status_de_voto) in conexaobd.cursor.fetchall():
         print(f'ID: {id} - Nome: {nome} - Mesario: {mesario} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
+    
+def busca_eleitores():
+    sql = "SELECT id, nome, mesario, status_de_voto FROM eleitores WHERE id = 1"
+    valores = ()
+    conexaobd.cursor.execute(sql, valores)
