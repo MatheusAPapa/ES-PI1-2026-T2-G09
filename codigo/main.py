@@ -55,8 +55,22 @@ while escolha != 3:
                     input('Precione enter para voltar à tela inicial')
                 #fazer uma busca por eleitor
                 case 4:
-                    print('fazer uma busca por um eleitor')
-                    break
+                    os.system("cls")
+                    print("=====================================")
+                    print("        Buscar eleitor")
+                    print("=====================================\n")
+                    cpf = str(input("Digite o CPF do eleitor: "))
+                    while verificacoes.verificarCPF(cpf) == False:
+                       cpf = str(input('Informe o CPF do eleitor: '))
+                    
+                    titulo_eleitor = str(input('Informe o título do eleitor: '))
+                    while verificacoes.verificarTitulo(titulo_eleitor) == False:
+                        print('Título de eleitor inválido!')
+                        titulo_eleitor = str(input('Informe o título de eleitor: '))
+                    
+                    funcoesEleitor.busca_eleitores(cpf, titulo_eleitor)
+
+                    input('Precione enter para voltar à tela inicial!')
                 #remover um eleitor
                 case 5:
                     print('remover um eleitor')

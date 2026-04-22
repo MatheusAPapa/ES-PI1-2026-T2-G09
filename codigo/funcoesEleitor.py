@@ -71,3 +71,10 @@ def listar_eleitores():
     conexaobd.cursor.execute('SELECT id, nome, mesario, status_de_voto FROM eleitores')
     for (id, nome, mesario, status_de_voto) in conexaobd.cursor.fetchall():
         print(f'ID: {id} - Nome: {nome} - Mesario: {mesario} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
+    
+def busca_eleitores(cpf, titulo):
+    sql = "SELECT id, nome, mesario, status_de_voto FROM eleitores WHERE cpf=%s and numero_titulo=%s"
+    valores = (cpf, titulo)
+    conexaobd.cursor.execute(sql, valores)
+    for (id, nome, mesario, status_de_voto) in conexaobd.cursor.fetchall():
+        print(f'ID: {id} - Nome: {nome} - Mesario: {'Será mesario' if mesario == 1 else 'Não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
