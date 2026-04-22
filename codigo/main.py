@@ -45,14 +45,17 @@ while escolha != 3:
 
                     #cadastrando o novo eleitor
                     funcoesEleitor.cadastrar_novo_eleitor(nome_eleitor, titulo_eleitor, cpf, mesario)
+                
                 #editar dados do eleitor
                 case 2:
                     print('editar dados do eleitor')
                     break
+                
                 #listagem de todos os eleitores
                 case 3:
                     funcoesEleitor.listar_eleitores()
                     input('Precione enter para voltar à tela inicial')
+                
                 #fazer uma busca por eleitor
                 case 4:
                     os.system("cls")
@@ -69,12 +72,27 @@ while escolha != 3:
                         titulo_eleitor = str(input('Informe o título de eleitor: '))
                     
                     funcoesEleitor.busca_eleitores(cpf, titulo_eleitor)
-
                     input('Precione enter para voltar à tela inicial!')
+                
                 #remover um eleitor
                 case 5:
-                    print('remover um eleitor')
-                    break
+                    os.system("cls")
+                    print("=====================================")
+                    print("        Removendo eleitor")
+                    print("=====================================\n")
+                    #validação do cpf
+                    cpf = str(input("Digite o CPF do eleitor: "))
+                    while verificacoes.verificarCPF(cpf) == False:
+                       cpf = str(input('Informe o CPF do eleitor: '))
+                    
+                    #validação do titulo de eleitor
+                    titulo_eleitor = str(input('Informe o título do eleitor: '))
+                    while verificacoes.verificarTitulo(titulo_eleitor) == False:
+                        print('Título de eleitor inválido!')
+                        titulo_eleitor = str(input('Informe o título de eleitor: '))
+
+                    funcoesEleitor.deletar_eleitor(cpf, titulo_eleitor)
+                    input('Precione enter para voltar à tela inicial! ')
                 #voltar
                 case 6:
                     pass
