@@ -76,5 +76,21 @@ def busca_eleitores(cpf, titulo):
     sql = "SELECT id, nome, mesario, status_de_voto FROM eleitores WHERE cpf=%s and numero_titulo=%s"
     valores = (cpf, titulo)
     conexaobd.cursor.execute(sql, valores)
-    for (id, nome, mesario, status_de_voto) in conexaobd.cursor.fetchall():
+
+    try:
+        #fetchone retorna uma tupla com os valores do banco de dados(apenas de uma linha), caso não aja eleitor será retornado None
+        id, nome, mesario, status_de_voto = conexaobd.cursor.fetchone()
         print(f'ID: {id} - Nome: {nome} - Mesario: {'Será mesario' if mesario == 1 else 'Não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
+    except:
+        print('Eleitor não encontrado!')
+
+def deletar_eleitor(cpf, titulo):
+    try:
+        sql = "DELETE FROM eleitores WHERE cpf=%s and numero_titulo=%s"
+        values = (cpf, titulo)
+        conexaobd.cursor.execute(sql, values)
+        conexaobd.conexao.commit()
+        print('Eleitor removido com sucesso')
+    except Exception as e:
+        conexaobd.conexao.rollback()
+        print(f'Eleitor não encontrado! {e}')
