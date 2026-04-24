@@ -48,8 +48,11 @@ while escolha != 3:
                 
                 #editar dados do eleitor
                 case 2:
-                    print('editar dados do eleitor')
-                    break
+                    cpf = str(input("Digite o CPF do eleitor: "))
+                    while verificacoes.verificarCPF(cpf) == False:
+                        print('CPF inválido" Digite novamente. ')
+                        cpf = str(input("Digite o CPF do eleitor: "))
+                    funcoesEleitor.alterar_dados_eleitor(cpf)
                 
                 #listagem de todos os eleitores
                 case 3:

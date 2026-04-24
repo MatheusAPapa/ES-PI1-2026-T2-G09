@@ -1,6 +1,7 @@
 import mysql.connector
 import conexaobd
 import random
+import verificacoes
 
 def gerar_chave_acesso(nome):
     """Gera a chave de acesso no formato solicitado a partir do nome do eleitor"""
@@ -62,11 +63,6 @@ def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
         print(f"\n❌ Erro ao cadastrar no banco de dados: {err}")
         input("\nPressione Enter para voltar a tela inicial...")
 
-    finally:
-        if 'conn' in locals() and conexaobd.conexao.is_connected():
-            conexaobd.cursor.close()
-            conexaobd.conexao.close()
-
 def listar_eleitores():
     conexaobd.cursor.execute('SELECT id, nome, mesario, status_de_voto FROM eleitores')
     for (id, nome, mesario, status_de_voto) in conexaobd.cursor.fetchall():
@@ -95,74 +91,90 @@ def deletar_eleitor(cpf, titulo):
         conexaobd.conexao.rollback()
         print(f'Eleitor não encontrado! {e}')
 
-def alterar_dados_eleitor(nome, numero_titulo, cpf, mesario, chave_acesso):
+def alterar_dados_eleitor(cpf):
     try:
-        cpf = input("Digite o CPF do eleitor: ")
-        sql_busca = "SELECT * FROM eleitores WHERE cpf = %s"
-        conexaobd.cursor.execute(sql, ) # não sei oq colocar dentro do ()
+        sql_busca = "SELECT nome, numero_titulo, mesario, chave_acesso FROM eleitores WHERE cpf = %s"
+        conexaobd.cursor.execute(sql_busca, [cpf])
         eleitor = conexaobd.cursor.fetchone()
-        if eleitor is None:
+
+        while eleitor is None:
             print("\n=====================================")
             print("❌ ELEITOR NÃO ENCONTRADO!")
             print("=====================================\n")
+            
+            cpf = str(input("Digite o CPF do eleitor: "))
+            while not verificacoes.verificarCPF(cpf):
+                print('CPF inválido. Digite novamente.')
+                cpf = str(input("Digite o CPF do eleitor: "))
 
+            conexaobd.cursor.execute(sql_busca, [cpf])
+            eleitor = conexaobd.cursor.fetchone()
+        
+        nome, numero_titulo, mesario, chave_acesso = eleitor
+        
         print("\n=====================================")
-        print(f"\nELEITOR ENCONTRADO: {nome}")
+        print(f"ELEITOR ENCONTRADO: {nome}")
         print("=====================================\n")
-
-        print("\n=====================================")
-        print("  O QUE DESEJA EDITAR?")
-        print("=====================================\n")
-        print("\nO que deseja editar?")
+        print("O QUE DESEJA EDITAR?")
         print("1 - Nome")
-        print("2 - Número do titulo de eleitor")
+        print("2 - Número do título de eleitor")
         print("3 - CPF")
         print("4 - Status de mesário")
         print("0 - Cancelar")
-        opcao = input("\nEscolha uma opção: ")
+        opcao = int(input("\nEscolha uma opção: "))
 
-    
         match opcao:
             case 0:
                 print("Edição cancelada!")
                 input("Pressione Enter para voltar a tela inicial...")
                 return
-            case 1:
-                novo_nome = input("Informe o  novo nome do eleitor: ")
-                sql = "UPDATE eleitores SET nome = %s, WHERE cpf = %s"
-                conexaobd.cursor.execute(sql, ) # nao sei oq coloca dentro do ()
+
+            case 1:        
+                novo_nome = str(input("Informe o novo nome do eleitor: "))
+                sql = "UPDATE eleitores SET nome = %s WHERE cpf = %s"  
+                conexaobd.cursor.execute(sql, [novo_nome, cpf])        
+
             case 2:
-                novo_titulo = input("Digite o novo número do título: ")
+                novo_titulo = str(input("Digite o novo número do título: "))
                 sql = "UPDATE eleitores SET numero_titulo = %s WHERE cpf = %s"
-                conexaobd.cursor.execute(sql, ) #nao sei oq coloca dentro do ()
+                conexaobd.cursor.execute(sql, [novo_titulo, cpf])      
+
             case 3:
-                novo_cpf = input("Digite o novo CPF: ")
+                novo_cpf = str(input("Digite o novo CPF: "))
                 sql = "UPDATE eleitores SET cpf = %s WHERE cpf = %s"
-                conexaobd.cursor.execute(sql, ) #nao sei oq coloca dentro do ()
+                conexaobd.cursor.execute(sql, [novo_cpf, cpf])         
+
             case 4:
                 print("Eleitor é mesário?")
                 print("1 - Sim")
                 print("2 - Não")
-                opcao_mesario = input("Escolha: ")
-                match opcao_mesario:
-                    case 1:
-                        opcao_mesario == 1
-                        novo_valor = True
-                    case 2:
-                        opcao_mesario == 2
-                        novo_valor = False
-                    case _:
-                        print("\n❌ Opção inválida!")
-                        input("\nPressione Enter para voltar a tela inicial...")
-                        return
+                opcao_mesario = int(input("Escolha: "))
 
+                while opcao_mesario not in [1, 2]:  
+                    print('Opção inválida!')
+                    opcao_mesario = int(input("Escolha: "))
+
+                novo_valor = opcao_mesario == 1 
                 sql = "UPDATE eleitores SET mesario = %s WHERE cpf = %s"
-                conexaobd.cursor.execute(sql, ) #nao sei oq coloca dentro do ()
+                conexaobd.cursor.execute(sql, [novo_valor, cpf])       
+
             case _:
-                    print("\n❌ Opção inválida!")
-                    input("\nPressione Enter para voltar a tela inicial...")
-                    return
-        conexaobd.conexao.commit(sql, )
+                print("\n❌ Opção inválida!")
+                input("\nPressione Enter para voltar a tela inicial...")
+                return
+
+        conexaobd.conexao.commit()
+        
+        #mostrando os dados do eleitor após alteração
+        cpf_busca = novo_cpf if opcao == 3 else cpf
+        #limpa o cache do cursor, assim mostrando os dados atualizado, não os atingos
+        conexaobd.cursor = conexaobd.conexao.cursor()
+
+        sql_busca = "SELECT nome, cpf, numero_titulo, mesario, chave_acesso FROM eleitores WHERE cpf = %s"
+        conexaobd.cursor.execute(sql_busca, [cpf_busca])
+        eleitor = conexaobd.cursor.fetchone()
+        nome, cpf, numero_titulo, mesario, chave_acesso = eleitor 
+
         print("\n=====================================")
         print("✅ DADOS ATUALIZADOS COM SUCESSO!")
         print("=====================================\n")
@@ -170,25 +182,18 @@ def alterar_dados_eleitor(nome, numero_titulo, cpf, mesario, chave_acesso):
         print(f"Título: {numero_titulo}")
         print(f"CPF: {cpf}")
         print(f"Chave de acesso: {chave_acesso}")
-        print(f"Mesário: {'Sim' if mesario else 'Não'}")
+        print(f"Mesário: {'Sim' if mesario == 1 else 'Não'}")
         input("\nPressione Enter para voltar a tela inicial...")
    
     except mysql.connector.IntegrityError as err:
-        match "cpf" in str(err).lower(), "numero_titulo" in str(err).lower():
-            case (True, _):
-                print("\n❌ Erro: Este CPF já está cadastrado no sistema!")
-                input("\nPressione Enter para voltar a tela inicial...")
-            case (_, True):
-                print("\n❌ Erro: Este título já está cadastrado no sistema!")
-                input("\nPressione Enter para voltar a tela inicial...")
-            case _:
-                print(f"\n❌ Erro: {err}")
+        if "cpf" in str(err).lower():
+            print("\n❌ Erro: Este CPF já está cadastrado no sistema!")
+        elif "numero_titulo" in str(err).lower():
+            print("\n❌ Erro: Este título já está cadastrado no sistema!")
+        else:
+            print(f"\n❌ Erro: {err}")
+        input("\nPressione Enter para voltar a tela inicial...")
 
     except mysql.connector.Error as err:
         print(f"\n❌ Erro ao editar no banco de dados: {err}")
         input("\nPressione Enter para voltar a tela inicial...")
-
-    finally:
-        if 'conn' in locals() and conexaobd.conexao.is_connected():
-            conexaobd.cursor.close()
-            conexaobd.conexao.close()
