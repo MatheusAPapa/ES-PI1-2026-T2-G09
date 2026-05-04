@@ -23,7 +23,7 @@ conexao = mysql.connector.connect(
 cursor = conexao.cursor()
 
 escolha = 0
-while escolha != 3:
+while escolha != 4:
     escolha = menus.menuInic()
     #modulo de gerenciamento
     match escolha:
@@ -117,8 +117,14 @@ while escolha != 3:
                 case 6:
                     pass
     
-        #modulo de votação
-        case 2:
-            navegacaoModVotacao.modVotacao()
-        case 3:
-            print('Saindo do sistema')
+       #modulo de votação
+case 2:
+    navegacaoModVotacao.modVotacao()
+
+case 3:
+    os.system("cls")
+    mostrar_resultado(cursor)
+    input("\nPrecione enter para voltar à tela inicial!")
+
+case 4:
+    print("Saindo do sistema")
