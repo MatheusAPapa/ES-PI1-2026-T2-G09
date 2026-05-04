@@ -2,6 +2,7 @@ import mysql.connector
 import conexaobd
 import random
 import verificacoes
+import os
 
 def gerar_chave_acesso(nome):
     """Gera a chave de acesso no formato solicitado a partir do nome do eleitor"""
@@ -61,7 +62,7 @@ def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
             
     except mysql.connector.Error as err:
         print(f"\n❌ Erro ao cadastrar no banco de dados: {err}")
-        input("\nPressione Enter para voltar a tela inicial...")
+        input('\nPrecione enter para voltar à tela inicial! ')
 
 def listar_eleitores():
     conexaobd.cursor.execute('SELECT id, nome, mesario, status_de_voto FROM eleitores')
@@ -98,6 +99,7 @@ def alterar_dados_eleitor(cpf):
         eleitor = conexaobd.cursor.fetchone()
 
         while eleitor is None:
+            os.system('cls')
             print("\n=====================================")
             print("❌ ELEITOR NÃO ENCONTRADO!")
             print("=====================================\n")
@@ -109,8 +111,12 @@ def alterar_dados_eleitor(cpf):
 
             conexaobd.cursor.execute(sql_busca, [cpf])
             eleitor = conexaobd.cursor.fetchone()
+
+            
         
         nome, numero_titulo, mesario, chave_acesso = eleitor
+        
+        os.system('cls')
         
         print("\n=====================================")
         print(f"ELEITOR ENCONTRADO: {nome}")
@@ -123,11 +129,15 @@ def alterar_dados_eleitor(cpf):
         print("0 - Cancelar")
         opcao = int(input("\nEscolha uma opção: "))
 
+        while opcao not in [0, 1, 2, 3, 4]:
+            print("\n❌ Opção inválida!")
+            opcao = int(input("\nEscolha uma opção válida: "))
+
         match opcao:
             case 0:
                 print("Edição cancelada!")
                 input("Pressione Enter para voltar a tela inicial...")
-                return
+                
 
             case 1:        
                 novo_nome = str(input("Informe o novo nome do eleitor: "))
@@ -157,11 +167,7 @@ def alterar_dados_eleitor(cpf):
                 novo_valor = opcao_mesario == 1 
                 sql = "UPDATE eleitores SET mesario = %s WHERE cpf = %s"
                 conexaobd.cursor.execute(sql, [novo_valor, cpf])       
-
-            case _:
-                print("\n❌ Opção inválida!")
-                input("\nPressione Enter para voltar a tela inicial...")
-                return
+                
 
         conexaobd.conexao.commit()
         
@@ -174,6 +180,8 @@ def alterar_dados_eleitor(cpf):
         conexaobd.cursor.execute(sql_busca, [cpf_busca])
         eleitor = conexaobd.cursor.fetchone()
         nome, cpf, numero_titulo, mesario, chave_acesso = eleitor 
+
+        os.system('cls')
 
         print("\n=====================================")
         print("✅ DADOS ATUALIZADOS COM SUCESSO!")
@@ -192,8 +200,8 @@ def alterar_dados_eleitor(cpf):
             print("\n❌ Erro: Este título já está cadastrado no sistema!")
         else:
             print(f"\n❌ Erro: {err}")
-        input("\nPressione Enter para voltar a tela inicial...")
+        input('\nPrecione enter para voltar à tela inicial! ')
 
     except mysql.connector.Error as err:
         print(f"\n❌ Erro ao editar no banco de dados: {err}")
-        input("\nPressione Enter para voltar a tela inicial...")
+        input('\nPrecione enter para voltar à tela inicial! ')

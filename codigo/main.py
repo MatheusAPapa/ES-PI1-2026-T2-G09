@@ -48,16 +48,16 @@ while escolha != 3:
                 
                 #editar dados do eleitor
                 case 2:
-                    cpf = str(input("Digite o CPF do eleitor: "))
+                    cpf = str(input("\nDigite o CPF do eleitor: "))
                     while verificacoes.verificarCPF(cpf) == False:
-                        print('CPF inválido" Digite novamente. ')
+                        print('CPF inválido Digite novamente. ')
                         cpf = str(input("Digite o CPF do eleitor: "))
                     funcoesEleitor.alterar_dados_eleitor(cpf)
                 
                 #listagem de todos os eleitores
                 case 3:
                     funcoesEleitor.listar_eleitores()
-                    input('Precione enter para voltar à tela inicial')
+                    input('\nPrecione enter para voltar à tela inicial! ')
                 
                 #fazer uma busca por eleitor
                 case 4:
@@ -75,7 +75,7 @@ while escolha != 3:
                         titulo_eleitor = str(input('Informe o título de eleitor: '))
                     
                     funcoesEleitor.busca_eleitores(cpf, titulo_eleitor)
-                    input('Precione enter para voltar à tela inicial!')
+                    input('\nPrecione enter para voltar à tela inicial! ')
                 
                 #remover um eleitor
                 case 5:
@@ -95,7 +95,7 @@ while escolha != 3:
                         titulo_eleitor = str(input('Informe o título de eleitor: '))
 
                     funcoesEleitor.deletar_eleitor(cpf, titulo_eleitor)
-                    input('Precione enter para voltar à tela inicial! ')
+                    input('\nPrecione enter para voltar à tela inicial! ')
                 #voltar
                 case 6:
                     pass
