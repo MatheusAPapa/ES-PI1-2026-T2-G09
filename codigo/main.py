@@ -16,8 +16,8 @@ def mostrar_resultado(cursor):
 conexao = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="",
-    database="eleicao"
+    password="MAP8@12032008",
+    database="PI"
 )
 
 cursor = conexao.cursor()
