@@ -106,8 +106,7 @@ def menuResulVota ():
     1 - Boletim de urna
     2 - Estatísticas 
     3 - Votos por partido
-    4 - Validação de integridade
-    5 - Voltar para menu anterior
+    4 - Voltar para menu anterior
           
     ====================================
           
@@ -115,7 +114,7 @@ def menuResulVota ():
     opcao = int(input('Selecione uma das opções acima: '))
     
     #verificação de escolha válida
-    while opcao not in (1, 2, 3, 4, 5):
+    while opcao not in (1, 2, 3, 4):
         print('Opção inválida!')
         opcao = int(input('Selecione um opção válida: '))
     return opcao
