@@ -5,7 +5,6 @@ import navegacaoModVotacao
 import funcoesEleitor
 import verificacoes
 
-
 escolha = 0
 while escolha != 3:
     escolha = menus.menuInic()
