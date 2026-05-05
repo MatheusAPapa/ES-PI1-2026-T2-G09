@@ -10,8 +10,7 @@ def menuInic ():
           
     1 - Módulo de gerênciamento
     2 - Módulo de votação
-    3 - Mostar Resultado
-    4 - Sair do sistema
+    3 - Sair do sistema
           
     ====================================
           
@@ -19,7 +18,7 @@ def menuInic ():
     escolha = int(input('Qual módulo você deseja entrar? '))
     
     #verificação de escolha válida
-    while escolha not in (1, 2, 3, 4):
+    while escolha not in (1, 2, 3):
         print('Opção inválida!')
         escolha = int(input('Selecione um opção válida: '))
     return escolha
