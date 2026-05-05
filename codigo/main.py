@@ -5,14 +5,6 @@ import navegacaoModVotacao
 import funcoesEleitor
 import verificacoes
 
-conexao = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="",
-    database="eleicao"
-)
-
-cursor = conexao.cursor()
 
 escolha = 0
 while escolha != 3:
