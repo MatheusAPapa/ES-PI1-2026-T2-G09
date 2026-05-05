@@ -5,19 +5,11 @@ import navegacaoModVotacao
 import funcoesEleitor
 import verificacoes
 
-def mostrar_resultado(cursor):
-        cursor.execute(“SELECT candidato, COUNT(*) FROM votos GROUP BY candidato”)
-        resultados = cursor.fetcha11()
-
-     print(“\n===== RESULTADOS =====”
-     for r in resultados:
-     print(f“{r[0]}: {r[1]} votos”)
-
 conexao = mysql.connector.connect(
     host="localhost",
     user="root",
-    password="MAP8@12032008",
-    database="PI"
+    password="",
+    database="eleicao"
 )
 
 cursor = conexao.cursor()
@@ -122,9 +114,4 @@ case 2:
     navegacaoModVotacao.modVotacao()
 
 case 3:
-    os.system("cls")
-    mostrar_resultado(cursor)
-    input("\nPrecione enter para voltar à tela inicial!")
-
-case 4:
-    print("Saindo do sistema")
+    print(“Saindo do sistema ”)
