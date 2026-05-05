@@ -15,7 +15,7 @@ conexao = mysql.connector.connect(
 cursor = conexao.cursor()
 
 escolha = 0
-while escolha != 4:
+while escolha != 3:
     escolha = menus.menuInic()
     #modulo de gerenciamento
     match escolha:
