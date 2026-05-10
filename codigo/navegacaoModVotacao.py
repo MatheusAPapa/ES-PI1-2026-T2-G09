@@ -1,12 +1,13 @@
-import menus as menus
+import menus 
+import funcoesVotacao
 
 def modAuditoria():
     opcaoAudVota = menus.menuAudVota()
     match opcaoAudVota:
         #logs 
         case 1:
-            print('logs')
-            exit()
+            funcoesVotacao.exibir_logs()
+            input('\nPrecione enter para voltar à tela inicial! ')
         #protocolos
         case 2:
             print('protocolos de votação')

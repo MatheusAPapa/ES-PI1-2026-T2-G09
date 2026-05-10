@@ -1,8 +1,8 @@
-import mysql.connector
 import os
 import menus
 import navegacaoModVotacao
 import funcoesEleitor
+import funcoesVotacao
 import verificacoes
 
 escolha = 0
@@ -45,7 +45,8 @@ while escolha != 3:
 
                     #cadastrando o novo eleitor
                     funcoesEleitor.cadastrar_novo_eleitor(nome_eleitor, titulo_eleitor, cpf, mesario)
-                
+                    funcoesVotacao.registrar_log('Novo eleitor cadastrado.')
+
                 #editar dados do eleitor
                 case 2:
                     cpf = str(input("\nDigite o CPF do eleitor: "))
@@ -53,7 +54,8 @@ while escolha != 3:
                         print('CPF inválido Digite novamente. ')
                         cpf = str(input("Digite o CPF do eleitor: "))
                     funcoesEleitor.alterar_dados_eleitor(cpf)
-                
+                    funcoesVotacao.registrar_log('Foi alterado os dados de um eleitor.')
+
                 #listagem de todos os eleitores
                 case 3:
                     funcoesEleitor.listar_eleitores()
@@ -96,13 +98,15 @@ while escolha != 3:
 
                     funcoesEleitor.deletar_eleitor(cpf, titulo_eleitor)
                     input('\nPrecione enter para voltar à tela inicial! ')
+                    funcoesVotacao.registrar_log('Um eleitor foi removido do sistema.')
+
                 #voltar
                 case 6:
                     pass
     
        #modulo de votação
-case 2:
-    navegacaoModVotacao.modVotacao()
+        case 2:
+            navegacaoModVotacao.modVotacao()
 
-case 3:
-    print(“Saindo do sistema ”)
+        case 3:
+            print('Saindo do sistema')
