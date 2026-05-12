@@ -1,4 +1,5 @@
 from datetime import datetime
+import random
 
 def registrar_log(mensagem):
     #regista a hora que ocorrerá o log
@@ -19,3 +20,13 @@ def exibir_logs ():
             print(conteudo)
     except FileNotFoundError:
         print('Arquivo não encontrado')
+
+def gerar_protocolo_votacao (candidato):
+    alfabeto = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M','N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    letras_aleatorias = ''.join(random.choices(alfabeto, k=2))
+    numeros_aleatorios = random.randint(10000, 99999)
+
+    protocolo = 'V' + letras_aleatorias + '26' + str(candidato) + str(numeros_aleatorios)
+    return protocolo
+
+print(gerar_protocolo_votacao(10))

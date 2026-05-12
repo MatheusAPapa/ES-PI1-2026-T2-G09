@@ -57,7 +57,7 @@ def menuModVota ():
             Módulo de votação
     ====================================
     
-    1 - Abri sistema de votação
+    1 - Abrir sistema de votação
     2 - Auditoria da votação
     3 - Resultado da votação
     4 - Voltar para menu anterior
@@ -106,7 +106,8 @@ def menuResulVota ():
     1 - Boletim de urna
     2 - Estatísticas 
     3 - Votos por partido
-    4 - Voltar para menu anterior
+    4 - Validar votação
+    5 - Voltar para menu anterior
           
     ====================================
           
@@ -114,7 +115,7 @@ def menuResulVota ():
     opcao = int(input('Selecione uma das opções acima: '))
     
     #verificação de escolha válida
-    while opcao not in (1, 2, 3, 4):
+    while opcao not in (1, 2, 3, 4, 5):
         print('Opção inválida!')
         opcao = int(input('Selecione um opção válida: '))
     return opcao
