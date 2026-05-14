@@ -1,9 +1,10 @@
 from datetime import datetime
 import random
+import criptografia
 
 def registrar_log(mensagem):
     #regista a hora que ocorrerá o log
-    data_hora = datetime.now().strftime("%d/%m/%Y - %H:%M:%S")
+    data_hora = datetime.now().strftime("%Y/%m/%d - %H:%M:%S")
     
     #tenta registra o log no arquivo txt, caso não de mostrará uma mensagem de erro
     try:
@@ -27,6 +28,5 @@ def gerar_protocolo_votacao (candidato):
     numeros_aleatorios = random.randint(10000, 99999)
 
     protocolo = 'V' + letras_aleatorias + '26' + str(candidato) + str(numeros_aleatorios)
+    protocolo_criptografado = criptografia.criptografar(protocolo)
     return protocolo
-
-print(gerar_protocolo_votacao(10))
