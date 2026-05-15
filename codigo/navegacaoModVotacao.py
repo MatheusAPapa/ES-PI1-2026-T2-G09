@@ -53,11 +53,9 @@ def modVotacao():
             titulo_eleitor = str(input('Informe o título do eleitor: '))
             while verificacoes.verificarTitulo(titulo_eleitor) == False:
                 print('Título de eleitor inválido!')
-                titulo_eleitor = str(input('Informe o título de eleitor: '))
+                titulo_eleitor = str(input('Informe seu título de eleitor: '))
             #verificando validade do cpf
-            cpf = str(input("Digite o CPF do eleitor: "))
-            while verificacoes.verificarCPF(cpf) == False:
-                cpf = str(input('Informe o CPF do eleitor: '))
+            cpf = str(input("Digite os 4 primeiros dígitos do CPF: "))
             chave_acesso = str(input('Digite a sua chave de acesso: '))
 
             funcoesVotacao.abrir_sistema_votacao(titulo_eleitor, cpf, chave_acesso)

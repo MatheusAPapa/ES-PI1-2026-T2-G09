@@ -1,6 +1,8 @@
 from datetime import datetime
 import random
 import conexaobd
+import verificacoes
+import os
 
 def registrar_log(mensagem):
     #regista a hora que ocorrerá o log
@@ -30,25 +32,49 @@ def gerar_protocolo_votacao (candidato):
     protocolo = 'V' + letras_aleatorias + '26' + str(candidato) + str(numeros_aleatorios)
     return protocolo
 
-def abrir_sistema_votacao (cpf_abrindo, titulo_abrindo, chave_acesso_abrindo ):
+def verificar_eleitor(titulo_eleitor, cpf_eleitor):
+    # a função verifica se o eleitor está no banco de dados e se ele já votou
+    sql = 'SELECT cpf, numero_titulo, status_de_voto FROM eleitores WHERE cpf=%s AND numero_titulo=%s'
+    values = [cpf_eleitor, titulo_eleitor]
+    conexaobd.cursor.execute(sql, values)
+    
+    resultado = conexaobd.cursor.fetchone()
+    
+    # verifica se o eleitor está cadastrado
+    if resultado is None:
+        print('Eleitor não encontrado!\n')
+        return False
+    #verificando se o eleitor já votou
+    ja_votou = resultado[2]
+    if ja_votou == True:
+        print('Não é possível votar duas vezes!\n')
+        return False
+    return True
+
+def abrir_sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
+    os.system('cls')
     #pega os dados do eleitor no banco de dados
-    sql = ('SELECT cpf, numero_titulo, mesario, chave_acesso FROM eleitores WHERE cpf=%s')
-    values = (cpf)
+    sql = ('SELECT cpf, numero_titulo, mesario, chave_acesso FROM eleitores WHERE numero_titulo=%s')
+    values = [titulo_abrindo]
     conexaobd.cursor.execute(sql, values)
     cpf, numero_titulo, mesario, chave_acesso = conexaobd.cursor.fetchone()
 
     #compara os dados do banco de dados com os dados informados pelos eleitores
     if mesario != True:
-        print('Você não tem permissão para abrir o sistema de votação!')
+        print('\nVocê não tem permissão para abrir o sistema de votação!')
+        return
     elif cpf_abrindo != cpf[0:4]:
-        print('Valídação dos dados falhou, pois o cpf está errado, não será possível fazer a abertura da votação! ')
+        print('\nValídação dos dados falhou, pois o cpf está errado, não será possível fazer a abertura da votação! ')
+        return
     elif titulo_abrindo != numero_titulo:
-        print('Valídação dos dados falhou, pois o título de eleitor está errado, não será possível fazer a abertura da votação! ')
+        print('\nValídação dos dados falhou, pois o título de eleitor está errado, não será possível fazer a abertura da votação! ')
+        return
     elif chave_acesso_abrindo != chave_acesso:
-        print('Valídação dos dados falhou, pois a chave de acesso está errada, não será possível fazer a abertura da votação! ')
+        print('\nValídação dos dados falhou, pois a chave de acesso está errada, não será possível fazer a abertura da votação! ')
+        return
         
     #fazendo a zerázima
-    conexaobd.cursor.execute('DELETE * FROM votos')
+    conexaobd.cursor.execute('DELETE FROM votos')
     conexaobd.conexao.commit()
     conexaobd.cursor.execute('''
     SELECT c.nome, c.numero, COUNT(v.voto) AS total_votos
@@ -57,7 +83,29 @@ def abrir_sistema_votacao (cpf_abrindo, titulo_abrindo, chave_acesso_abrindo ):
     GROUP BY c.numero, c.nome
     ''')
 
-    print("\n================= ZERÁZIMA ===================")
+    print("\n================= ZERÉZIMA ===================")
     for (nome, numero, total_votos) in conexaobd.cursor.fetchall():
-        print(f'Número: {numero} - Nome: {nome} - Total de votos: {total_votos}')
+        print(f'\nNúmero: {numero} - Nome: {nome} - Total de votos: {total_votos}')
     print("================================================\n")
+    input('Precione enter para iniciar a votação! ')
+
+    os.system('cls')
+    #computação dos votos
+    print('''
+    ====================================
+                  Votação
+    ====================================
+    ''')
+    encerrar = 'n'
+    while encerrar == 'n':
+        #verificando validade do CPF
+        cpf = str(input("Digite seu CPF: "))
+        while verificacoes.verificarCPF(cpf) == False:
+            cpf = str(input('Informe o CPF do eleitor: '))
+        #verificando validade do título
+        titulo_eleitor = str(input('Digite seu título de eleitor: '))
+        while verificacoes.verificarTitulo(titulo_eleitor) == False:
+            print('Título de eleitor inválido!')
+            titulo_eleitor = str(input('Informe o título de eleitor: '))
+        #verificando se o eleitor está no sistema
+        verificar_eleitor(titulo_eleitor, cpf)
