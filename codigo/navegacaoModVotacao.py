@@ -58,7 +58,7 @@ def modVotacao():
             cpf = str(input("Digite os 4 primeiros dígitos do CPF: "))
             chave_acesso = str(input('Digite a sua chave de acesso: '))
 
-            funcoesVotacao.abrir_sistema_votacao(titulo_eleitor, cpf, chave_acesso)
+            funcoesVotacao.sistema_votacao(titulo_eleitor, cpf, chave_acesso)
 
             input('Precione enter para voltar à tela inicial! ')
         #auditoria
