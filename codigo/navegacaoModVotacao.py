@@ -1,6 +1,7 @@
 import menus 
 import funcoesVotacao
 import verificacoes
+import os
 
 def modAuditoria():
     opcaoAudVota = menus.menuAudVota()
@@ -44,6 +45,7 @@ def modVotacao():
     match opcao:
         #abrir sistema de votação
         case 1:
+            os.system('cls')
             print('''
     ====================================
          Abrir sistema da votação
