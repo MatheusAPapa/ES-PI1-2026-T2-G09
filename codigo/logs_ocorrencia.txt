@@ -1,1 +1,2 @@
 10/05/2026 - 19:08:48 -> Foi alterado os dados de um eleitor.
+14/05/2026 - 20:42:16 -> Novo eleitor cadastrado.

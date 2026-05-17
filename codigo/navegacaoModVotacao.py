@@ -1,5 +1,7 @@
 import menus 
 import funcoesVotacao
+import verificacoes
+import os
 
 def modAuditoria():
     opcaoAudVota = menus.menuAudVota()
@@ -43,8 +45,24 @@ def modVotacao():
     match opcao:
         #abrir sistema de votação
         case 1:
-            print('abrir sistema')
-            exit()
+            os.system('cls')
+            print('''
+    ====================================
+         Abrir sistema da votação
+    ====================================
+            ''')
+            #verificando validade do título
+            titulo_eleitor = str(input('Informe o título do eleitor: '))
+            while verificacoes.verificarTitulo(titulo_eleitor) == False:
+                print('Título de eleitor inválido!')
+                titulo_eleitor = str(input('Informe seu título de eleitor: '))
+            #verificando validade do cpf
+            cpf = str(input("Digite os 4 primeiros dígitos do CPF: "))
+            chave_acesso = str(input('Digite a sua chave de acesso: '))
+
+            funcoesVotacao.sistema_votacao(titulo_eleitor, cpf, chave_acesso)
+
+            input('Precione enter para voltar à tela inicial! ')
         #auditoria
         case 2:
             modAuditoria()
