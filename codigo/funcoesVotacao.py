@@ -4,10 +4,11 @@ import conexaobd
 import verificacoes
 import os
 import time
+import criptografia_descriptografia
 
 def registrar_log(mensagem):
     #regista a hora que ocorrerá o log
-    data_hora = datetime.now().strftime("%d/%m/%Y - %H:%M:%S")
+    data_hora = datetime.now().strftime("%Y/%m/%d - %H:%M:%S")
     
     #tenta registra o log no arquivo txt, caso não de mostrará uma mensagem de erro
     try:
@@ -31,6 +32,7 @@ def gerar_protocolo_votacao (candidato):
     numeros_aleatorios = random.randint(10000, 99999)
 
     protocolo = 'V' + letras_aleatorias + '26' + str(candidato) + str(numeros_aleatorios)
+    protocolo_criptografado = criptografia_descriptografia.criptografar(protocolo)
     return protocolo
 
 def verificar_eleitor(titulo_eleitor, cpf_eleitor, chave_acesso_eleitor):

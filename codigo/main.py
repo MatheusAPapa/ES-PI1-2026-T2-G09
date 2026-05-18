@@ -4,6 +4,8 @@ import navegacaoModVotacao
 import funcoesEleitor
 import funcoesVotacao
 import verificacoes
+import criptografia_descriptografia
+
 
 escolha = 0
 while escolha != 3:
