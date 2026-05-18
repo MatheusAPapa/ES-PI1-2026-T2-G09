@@ -150,12 +150,12 @@ def alterar_dados_eleitor(cpf):
             case 1:        
                 novo_nome = str(input("Informe o novo nome do eleitor: "))
                 sql = "UPDATE eleitores SET nome = %s WHERE cpf = %s"  
-                conexaobd.cursor.execute(sql, [novo_nome, cpf])        
+                conexaobd.cursor.execute(sql, [novo_nome, cpf_criptografado])        
 
             case 2:
                 novo_titulo = str(input("Digite o novo número do título: "))
                 sql = "UPDATE eleitores SET numero_titulo = %s WHERE cpf = %s"
-                conexaobd.cursor.execute(sql, [novo_titulo, cpf])      
+                conexaobd.cursor.execute(sql, [novo_titulo, cpf_criptografado])      
 
             case 3:
                 novo_cpf = str(input("Digite o novo CPF: "))
@@ -175,7 +175,7 @@ def alterar_dados_eleitor(cpf):
 
                 novo_valor = opcao_mesario == 1 
                 sql = "UPDATE eleitores SET mesario = %s WHERE cpf = %s"
-                conexaobd.cursor.execute(sql, [novo_valor, cpf])       
+                conexaobd.cursor.execute(sql, [novo_valor, cpf_criptografado])       
                 
 
         conexaobd.conexao.commit()
@@ -197,8 +197,8 @@ def alterar_dados_eleitor(cpf):
         print("=====================================\n")
         print(f"Nome: {nome}")
         print(f"Título: {numero_titulo}")
-        print(f"CPF: {cpf}")
-        print(f"Chave de acesso: {chave_acesso}")
+        print(f"CPF: {criptografia_descriptografia.descriptografar(cpf)}")
+        print(f"Chave de acesso: {criptografia_descriptografia.descriptografar(chave_acesso)}")
         print(f"Mesário: {'Sim' if mesario == 1 else 'Não'}")
         input("\nPressione Enter para voltar a tela inicial...")
    

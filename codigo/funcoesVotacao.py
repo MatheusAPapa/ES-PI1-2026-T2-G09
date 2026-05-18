@@ -3,12 +3,11 @@ import random
 import conexaobd
 import verificacoes
 import os
-import time
 import criptografia_descriptografia
 
 def registrar_log(mensagem):
     #regista a hora que ocorrerá o log
-    data_hora = datetime.now().strftime("%Y/%m/%d - %H:%M:%S")
+    data_hora = datetime.now().strftime("%Y-%m-%d - %H:%M:%S")
     
     #tenta registra o log no arquivo txt, caso não de mostrará uma mensagem de erro
     try:
@@ -33,7 +32,25 @@ def gerar_protocolo_votacao (candidato):
 
     protocolo = 'V' + letras_aleatorias + '26' + str(candidato) + str(numeros_aleatorios)
     protocolo_criptografado = criptografia_descriptografia.criptografar(protocolo)
-    return protocolo
+    return protocolo, protocolo_criptografado
+
+def exibir_protocolos():
+    conexaobd.cursor.execute("SELECT protocolo_voto, data_hora FROM votos")
+    resultados = conexaobd.cursor.fetchall()
+
+    print("\n================================================")
+    print("             Protocolos de Votacao")
+    print("================================================")
+
+    if not resultados:
+        print("Nenhum protocolo registrado.")
+    else:
+        for i, (protocolo_cifrado, data_hora) in resultados:
+            try:
+                protocolo_original = criptografia_descriptografia.descriptografar(protocolo_cifrado)
+                protocolo_original = protocolo_original.rstrip('A')
+            except Exception:
+                protocolo_original = protocolo_cifrado
 
 def verificar_eleitor(titulo_eleitor, cpf_eleitor, chave_acesso_eleitor):
     # a função verifica se o eleitor está no banco de dados e se ele já votou
@@ -47,15 +64,21 @@ def verificar_eleitor(titulo_eleitor, cpf_eleitor, chave_acesso_eleitor):
     if resultado is None:
         print('Eleitor não encontrado!\n')
         return False
+    cpf_banco, _, chave_banco, ja_votou = resultado
+    cpf_real = criptografia_descriptografia.descriptografar(cpf_banco)
+
     #verificando se o cpf confere com o do banco de dados
     cpf = resultado[0]
     if cpf_eleitor != cpf[0:4]:
         print('Valídação dos dados falhou, pois o cpf está errado\n')
         return False
+    
     #verificando se a chave de acesso comfere com a do banco
     chave_de_acesso = resultado[2]
     if chave_acesso_eleitor != chave_de_acesso:
         return False
+    chave_eleitor_criptografada = criptografia_descriptografia.criptografar(chave_acesso_eleitor)
+
     #verificando se o eleitor já votou
     ja_votou = resultado[3]
     if ja_votou == True:
@@ -237,5 +260,9 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                     else:                   
                         encerrar = 1
                         break
-        
-                
+
+
+def boletim_urna():
+    conexaobd.cursor.execute
+    resultados = conexaobd.cursor.fetchall()
+    

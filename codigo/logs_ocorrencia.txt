@@ -1,2 +1,12 @@
 10/05/2026 - 19:08:48 -> Foi alterado os dados de um eleitor.
 14/05/2026 - 20:42:16 -> Novo eleitor cadastrado.
+2026/05/18 - 14:45:13 -> Novo eleitor cadastrado.
+2026/05/18 - 15:09:20 -> Novo eleitor cadastrado.
+2026-05-18 - 15:29:29 -> Novo eleitor cadastrado.
+2026-05-18 - 15:35:44 -> Foi alterado os dados de um eleitor.
+2026-05-18 - 15:36:56 -> Foi alterado os dados de um eleitor.
+2026-05-18 - 15:39:52 -> Foi alterado os dados de um eleitor.
+2026-05-18 - 15:52:01 -> Novo eleitor cadastrado.
+2026-05-18 - 15:53:46 -> Um eleitor foi removido do sistema.
+2026-05-18 - 16:02:31 -> Novo eleitor cadastrado.
+2026-05-18 - 16:05:47 -> Foi alterado os dados de um eleitor.

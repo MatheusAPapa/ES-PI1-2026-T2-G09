@@ -24,18 +24,18 @@ while escolha != 3:
                     #receberá os dados do eleitor
                     nome_eleitor = str(input('Informe o nome do eleitor: '))
 
-                        #verificando se o título é válido
+                    #verificando se o título é válido
                     titulo_eleitor = str(input('Informe o título de eleitor: '))
                     while verificacoes.verificarTitulo(titulo_eleitor) == False:
                         print('Título de eleitor inválido!')
                         titulo_eleitor = str(input('Informe o título de eleitor: '))
 
-                        #verificando se o cpf é válido
+                    #verificando se o cpf é válido
                     cpf = str(input('Informe o CPF do eleitor: '))
                     while verificacoes.verificarCPF(cpf) == False:
                         cpf = str(input('Informe o CPF do eleitor: '))
 
-                        #verificando possíveis respostas para se o eleitor é mesário
+                    #verificando possíveis respostas para se o eleitor é mesário
                     mesario = str(input('Informe se o mesário será eleitor [S/N]: '))
                     if mesario in ['s', 'S', 'sim', 'Sim']:
                         mesario = True
