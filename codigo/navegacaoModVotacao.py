@@ -12,8 +12,8 @@ def modAuditoria():
             input('\nPrecione enter para voltar à tela inicial! ')
         #protocolos
         case 2:
-            print('protocolos de votação')
-            exit()
+            funcoesVotacao.exibir_protocolos()
+            input('\nPrecione enter para voltar à tela inicial! ')    
         #voltar
         case 3: 
             modVotacao()
@@ -25,6 +25,7 @@ def modResultado():
         case 1:
             print('Boletim de urna')
             exit()
+            funcoesVotacao.registrar_log('Boletim de Urna impresso.')
         #estatísticas por candidato
         case 2:
             print('Estatisticas')
@@ -37,6 +38,7 @@ def modResultado():
         case 4:
             print('validação')
             exit()
+            funcoesVotacao.registrar_log('Resultados Validados.')
         case 5:
             modVotacao()
 
@@ -61,13 +63,14 @@ def modVotacao():
             chave_acesso = str(input('Digite a sua chave de acesso: '))
 
             funcoesVotacao.sistema_votacao(titulo_eleitor, cpf, chave_acesso)
-
+            funcoesVotacao.registrar_log('Sistema de votação foi aberto')
             input('Precione enter para voltar à tela inicial! ')
         #auditoria
         case 2:
             modAuditoria()
         #resultado
         case 3:
+            
             modResultado()
         #voltar
         case 4:
