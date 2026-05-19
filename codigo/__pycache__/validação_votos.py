@@ -1,38 +1,122 @@
 def validar_voto(voto, candidatos_validos):
     """
-    Função responsável por validar os votos do sistema.
-    Ela verifica se o voto é branco, nulo ou se pertence
-    à lista de candidatos válidos.
+    Regras:
+    - Enter vazio = inválido
+    - 'branco' = voto em branco
+    - Número inexistente = voto nulo
+    - Número existente = voto válido
     """
 
     if voto is None:
-        return False
+        return "invalido"
 
     voto = str(voto).strip()
 
     if voto == "":
-        return False
+        return "invalido"
 
     if voto.lower() == "branco":
-        return True
+        return "branco"
 
-    if voto.lower() == "nulo":
-        return True
-
+    # Verifica se o número existe
     if voto in candidatos_validos:
-        return True
+        return "valido"
 
-    return False
+    # Qualquer número inexistente vira nulo
+    return "nulo"
 
 
-# Testes simples da validação
-if __name__ == "__main__":
-    candidatos_validos = ["10", "13", "22", "45"]
+def registrar_voto(urna, tipo_voto, voto=None):
+    """
+    Registra o voto na urna.
+    """
 
-    votos_teste = ["10", "13", "22", "45", "branco", "nulo", "", "99", None]
+    if tipo_voto == "valido":
+        urna[voto] += 1
 
-    for voto in votos_teste:
-        if validar_voto(voto, candidatos_validos):
-            print(f"Voto '{voto}' é válido")
-        else:
-            print(f"Voto '{voto}' é inválido")
+    elif tipo_voto == "branco":
+        urna["branco"] += 1
+
+    elif tipo_voto == "nulo":
+        urna["nulo"] += 1
+
+
+def mostrar_resultado(urna, candidatos):
+    """
+    Mostra o resultado final.
+    """
+
+    print("\n===== RESULTADO FINAL =====")
+
+    total_votos = sum(urna.values())
+
+    for numero, nome in candidatos.items():
+
+        votos = urna[numero]
+
+        porcentagem = (votos / total_votos) * 100
+
+        print(
+            f"{nome} ({numero}): "
+            f"{votos} voto(s) "
+            f"({porcentagem:.1f}%)"
+        )
+
+    print(f"\nBrancos: {urna['branco']}")
+    print(f"Nulos: {urna['nulo']}")
+    print(f"Total de votos: {total_votos}")
+
+
+# =========================
+# SISTEMA PRINCIPAL
+# =========================
+
+candidatos = {
+    "10": "Felipe",
+    "20": "Joao",
+    "30": "Maria"
+}
+
+urna = {
+    "10": 0,
+    "20": 0,
+    "30": 0,
+    "branco": 0,
+    "nulo": 0
+}
+
+print("===== SISTEMA DE VOTAÇÃO =====")
+print("Digite 'encerrar' para finalizar.\n")
+
+print("Candidatos disponíveis:")
+
+for numero, nome in candidatos.items():
+    print(f"{numero} - {nome}")
+
+while True:
+
+    voto = input("\nDigite seu voto: ")
+
+    if voto.lower() == "encerrar":
+        break
+
+    resultado = validar_voto(voto, candidatos)
+
+    if resultado == "invalido":
+
+        print("Voto inválido!")
+
+    else:
+
+        registrar_voto(urna, resultado, voto)
+
+        if resultado == "valido":
+            print("Voto registrado com sucesso!")
+
+        elif resultado == "branco":
+            print("Voto em branco registrado!")
+
+        elif resultado == "nulo":
+            print("Voto nulo registrado!")
+
+mostrar_resultado(urna, candidatos)
