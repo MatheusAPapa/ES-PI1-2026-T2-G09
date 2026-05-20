@@ -54,3 +54,13 @@ def descriptografar(texto_cifrado):
         resultado += ALFABETO[c1] + ALFABETO[c2]
 
     return resultado
+print(descriptografar('FNCIFN8IEPVL'))
+'''Ana
+18081840095
+ANC9611
+'''
+
+'''João
+52172466859
+FEX9078
+'''

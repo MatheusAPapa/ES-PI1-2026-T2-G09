@@ -8,10 +8,12 @@ def modAuditoria():
     match opcaoAudVota:
         #logs 
         case 1:
+            os.system('cls')
             funcoesVotacao.exibir_logs()
             input('\nPrecione enter para voltar à tela inicial! ')
         #protocolos
         case 2:
+            os.system('cls')
             funcoesVotacao.exibir_protocolos()
             input('\nPrecione enter para voltar à tela inicial! ')    
         #voltar

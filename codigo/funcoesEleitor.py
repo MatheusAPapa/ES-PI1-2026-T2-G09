@@ -197,8 +197,8 @@ def alterar_dados_eleitor(cpf):
         print("=====================================\n")
         print(f"Nome: {nome}")
         print(f"Título: {numero_titulo}")
-        print(f"CPF: {criptografia_descriptografia.descriptografar(cpf)}")
-        print(f"Chave de acesso: {criptografia_descriptografia.descriptografar(chave_acesso)}")
+        print(f"CPF: {criptografia_descriptografia.descriptografar(cpf).rstrip('A')}")
+        print(f"Chave de acesso: {criptografia_descriptografia.descriptografar(chave_acesso).rstrip('A')}")
         print(f"Mesário: {'Sim' if mesario == 1 else 'Não'}")
         input("\nPressione Enter para voltar a tela inicial...")
    

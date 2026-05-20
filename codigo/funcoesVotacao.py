@@ -45,12 +45,16 @@ def exibir_protocolos():
     if not resultados:
         print("Nenhum protocolo registrado.")
     else:
-        for i, (protocolo_cifrado, data_hora) in resultados:
+        for i, (protocolo_cifrado, data_hora) in enumerate(resultados):  # ← enumerate aqui
             try:
                 protocolo_original = criptografia_descriptografia.descriptografar(protocolo_cifrado)
                 protocolo_original = protocolo_original.rstrip('A')
             except Exception:
                 protocolo_original = protocolo_cifrado
+            
+            print(f"{i+1}. Protocolo: {protocolo_original} | Data/Hora: {data_hora}")
+    
+    print("================================================")
 
 def verificar_eleitor(titulo_eleitor, cpf_eleitor, chave_acesso_eleitor):
     # a função verifica se o eleitor está no banco de dados e se ele já votou
@@ -64,20 +68,19 @@ def verificar_eleitor(titulo_eleitor, cpf_eleitor, chave_acesso_eleitor):
     if resultado is None:
         print('Eleitor não encontrado!\n')
         return False
-    cpf_banco, _, chave_banco, ja_votou = resultado
-    cpf_real = criptografia_descriptografia.descriptografar(cpf_banco)
-
+    
+    # descriptografa os dados do banco antes de comparar
+    cpf_banco = criptografia_descriptografia.descriptografar(resultado[0]).rstrip('A')
+    chave_banco = criptografia_descriptografia.descriptografar(resultado[2]).rstrip('A')
+    
     #verificando se o cpf confere com o do banco de dados
-    cpf = resultado[0]
-    if cpf_eleitor != cpf[0:4]:
+    if cpf_eleitor != cpf_banco[0:4]:
         print('Valídação dos dados falhou, pois o cpf está errado\n')
         return False
     
     #verificando se a chave de acesso comfere com a do banco
-    chave_de_acesso = resultado[2]
-    if chave_acesso_eleitor != chave_de_acesso:
+    if chave_acesso_eleitor != chave_banco:
         return False
-    chave_eleitor_criptografada = criptografia_descriptografia.criptografar(chave_acesso_eleitor)
 
     #verificando se o eleitor já votou
     ja_votou = resultado[3]
@@ -93,6 +96,10 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
     values = [titulo_abrindo]
     conexaobd.cursor.execute(sql, values)
     cpf, numero_titulo, mesario, chave_acesso = conexaobd.cursor.fetchone()
+
+    # descriptografando
+    cpf = criptografia_descriptografia.descriptografar(cpf)
+    chave_acesso = criptografia_descriptografia.descriptografar(chave_acesso).rstrip('A')
 
     #compara os dados do banco de dados com os dados informados pelo usuáro abrindo o sistema
     if mesario != True:
@@ -187,10 +194,10 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                 confirmacao = str(input(f'Escolha uma oção válida[S/N]: '))
     
         #computar voto
-        protocolo = gerar_protocolo_votacao(voto)
+        protocolo, protocolo_criptografado = gerar_protocolo_votacao(voto)
         data_hora = datetime.now().strftime("%Y/%m/%d - %H:%M:%S")
         sql = 'INSERT INTO votos (voto, protocolo_voto, data_hora) VALUES (%s, %s, %s)'
-        valores = [voto, protocolo, data_hora]
+        valores = [voto, protocolo_criptografado, data_hora]
         conexaobd.cursor.execute(sql, valores)
         conexaobd.conexao.commit()
 
@@ -240,18 +247,23 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                         continue
                     
                     #guarda os valores do banco de dados e depois verifica se pode encerrar a votação
-                    cpf_mesario = mesario[0]
+                    cpf_mesario = criptografia_descriptografia.descriptografar(mesario[0]).rstrip('A')
+                    chave_mesario = criptografia_descriptografia.descriptografar(mesario[3]).rstrip('A')
                     status_mesario = mesario[2]
                         #verificando se o cpf está correto:
                     if cpf != cpf_mesario[0:4]:
                         print('Erro ao validar dados! CPF incorreto!')
+                        continue
+                        #verificando chave de acesso
+                    if chave_acesso != chave_mesario:
+                        print('Erro ao validar dados! Chave de acesso incorreta!')
                         continue
                         #verificando se é mesário
                     if status_mesario == False:
                         print('Você não tem permição para encerrar o sistema!')
                         continue
                     
-                    encerrando = str(input('Deseja realmente encerrar a votação [S/N]? '))
+                    encerrando = str(input('\nDeseja realmente encerrar a votação [S/N]? '))
                     while encerrando.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
                         encerrando = str(input(f'Escolha uma oção válida[S/N]: '))
                     if encerrando.lower() in ['s', 'sim']:
