@@ -86,6 +86,7 @@ def verificar_eleitor(titulo_eleitor, cpf_eleitor, chave_acesso_eleitor):
     ja_votou = resultado[3]
     if ja_votou == True:
         print('Não é possível votar duas vezes!\n')
+        registrar_log('ALERTA: Tentativa de voto duplo')
         return False
     return True
 
@@ -104,20 +105,26 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
     #compara os dados do banco de dados com os dados informados pelo usuáro abrindo o sistema
     if mesario != True:
         print('\nVocê não tem permissão para abrir o sistema de votação!')
+        registrar_log('ALERTA: Tentativa de acesso negada')
         return
     elif cpf_abrindo != cpf[0:4]:
         print('\nValídação dos dados falhou, pois o cpf está errado, não será possível fazer a abertura da votação! ')
+        registrar_log('ALERTA: Tentativa de acesso negada')
         return
     elif titulo_abrindo != numero_titulo:
         print('\nValídação dos dados falhou, pois o título de eleitor está errado, não será possível fazer a abertura da votação! ')
+        registrar_log('ALERTA: Tentativa de acesso negada')
         return
     elif chave_acesso_abrindo != chave_acesso:
         print('\nValídação dos dados falhou, pois a chave de acesso está errada, não será possível fazer a abertura da votação! ')
+        registrar_log('ALERTA: Tentativa de acesso negada')
         return
-    print('\nSistema de votação aberto com sucesso!')
-    input('Precione enter para iniciar a zerézima! ')
-        
+    else:
+        print('\nSistema de votação aberto com sucesso!')
+        registrar_log('ABERTURA: Sistema de votação aberto com sucesso')
+    
     #fazendo a zerézima
+    input('Precione enter para iniciar a zerézima! ')
         #deleta todos os votos
     conexaobd.cursor.execute('DELETE FROM votos')
     conexaobd.conexao.commit()
@@ -139,7 +146,9 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
     for (nome, numero, total_votos) in conexaobd.cursor.fetchall():
         print(f'\nNúmero: {numero} - Nome: {nome} - Total de votos: {total_votos}')
     print('=================================================\n')
+    
     input('Precione enter para iniciar a votação! ')
+    registrar_log('Zerézima realizada, total de votos zerado')      
 
     os.system('cls')
     #computação dos votos
@@ -148,72 +157,11 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
     print("================================================")
     encerrar = 1
     while encerrar == 1:
-        print('''
-=======================================
-        Identificaçao do eleitor
-=======================================
-        ''')
-
-        #verificando validade do título
-        titulo_eleitor = str(input('Digite seu título de eleitor: '))
-        while verificacoes.verificarTitulo(titulo_eleitor) == False:
-            print('Título de eleitor inválido!')
-            titulo_eleitor = str(input('Informe o título de eleitor: '))
-        cpf = str(input('Digite os 4 primeiros dígitos do seu CPF: '))
-        chave_acesso = str(input('Digite a sua chave de acesso: '))
-
-        #verificando se o eleitor está no sistema
-        if not verificar_eleitor(titulo_eleitor, cpf, chave_acesso):
-            continue
-        
-        print('\nEleitor encontrado!')
-        confirmacao = 'n'
-        while confirmacao.lower() not in ['s', 'sim']:
-            voto = int(input('\nDigite o número do candidato para votar: '))
-            sql = ('SELECT nome, partido FROM candidatos WHERE numero=%s')
-            valores = [voto]
-            conexaobd.cursor.execute(sql, valores)
-            candidato = conexaobd.cursor.fetchone()
-            while candidato == None:
-                print('Candidato não encontrado!')
-                voto = int(input('Digite o número de um candidato existente: '))
-                sql = ('SELECT nome, partido FROM candidatos WHERE numero=%s')
-                valores = [voto]
-                conexaobd.cursor.execute(sql, valores)
-                candidato = conexaobd.cursor.fetchone()
-            
-            print(f'''
-            ======================================
-                        Candidato
-            ======================================
-            Candidato: {candidato[0]}
-            Partido: {candidato[1]}
-            ''')
-            confirmacao = str(input(f'Confirme o voto [S - votar em {candidato[0]}/N - votar em outra pessoa]: '))
-            while confirmacao.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
-                confirmacao = str(input(f'Escolha uma oção válida[S/N]: '))
-    
-        #computar voto
-        protocolo, protocolo_criptografado = gerar_protocolo_votacao(voto)
-        data_hora = datetime.now().strftime("%Y/%m/%d - %H:%M:%S")
-        sql = 'INSERT INTO votos (voto, protocolo_voto, data_hora) VALUES (%s, %s, %s)'
-        valores = [voto, protocolo_criptografado, data_hora]
-        conexaobd.cursor.execute(sql, valores)
-        conexaobd.conexao.commit()
-
-        sql = 'UPDATE eleitores SET status_de_voto = TRUE WHERE numero_titulo = %s'
-        valores = [titulo_eleitor]
-        conexaobd.cursor.execute(sql, valores)
-        conexaobd.conexao.commit()
-        print('Voto registrado com sucesso!')
-        print(f'Protocolo da votação: {protocolo}')
-        input('Precione enter para continuar! ')
-
         os.system('cls')
-        print('\n======================================')
-        print('1 - Voltar à votar')
+        print('\n===================================')
+        print('1 - Votar')
         print('2 - Encerrar votação')
-        print('======================================')
+        print('===================================\n')
 
         encerrar = int(input('Digite a ação desejada: '))
         while encerrar not in [1, 2]: 
@@ -222,8 +170,67 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
         os.system('cls')
         match encerrar:
             case 1:
-                #aqui o continue també faz voltar à votação
-                continue
+                print('''
+=======================================
+        Identificaçao do eleitor
+=======================================
+        ''')
+                #verificando validade do título
+                titulo_eleitor = str(input('Digite seu título de eleitor: '))
+                while verificacoes.verificarTitulo(titulo_eleitor) == False:
+                    print('Título de eleitor inválido!')
+                    titulo_eleitor = str(input('Informe o título de eleitor: '))
+                cpf = str(input('Digite os 4 primeiros dígitos do seu CPF: '))
+                chave_acesso = str(input('Digite a sua chave de acesso: '))
+
+                #verificando se o eleitor está no sistema e se o eleitor já votou
+                if not verificar_eleitor(titulo_eleitor, cpf, chave_acesso):
+                    input('Precione enter para voltar no menu de votação! ')
+                    continue
+                
+                print('\nEleitor encontrado!')
+                confirmacao = 'n'
+                while confirmacao.lower() not in ['s', 'sim']:
+                    voto = int(input('\nDigite o número do candidato para votar: '))
+                    sql = ('SELECT nome, partido FROM candidatos WHERE numero=%s')
+                    valores = [voto]
+                    conexaobd.cursor.execute(sql, valores)
+                    candidato = conexaobd.cursor.fetchone()
+                    while candidato == None:
+                        print('Candidato não encontrado!')
+                        voto = int(input('Digite o número de um candidato existente: '))
+                        sql = ('SELECT nome, partido FROM candidatos WHERE numero=%s')
+                        valores = [voto]
+                        conexaobd.cursor.execute(sql, valores)
+                        candidato = conexaobd.cursor.fetchone()
+                    
+                    print(f'''
+                    ======================================
+                                Candidato
+                    ======================================
+                    Candidato: {candidato[0]}
+                    Partido: {candidato[1]}
+                    ''')
+                    confirmacao = str(input(f'Confirme o voto [S - votar em {candidato[0]}/N - votar em outra pessoa]: '))
+                    while confirmacao.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
+                        confirmacao = str(input(f'Escolha uma oção válida[S/N]: '))
+            
+                #computar voto
+                protocolo, protocolo_criptografado = gerar_protocolo_votacao(voto)
+                data_hora = datetime.now().strftime("%Y/%m/%d - %H:%M:%S")
+                sql = 'INSERT INTO votos (voto, protocolo_voto, data_hora) VALUES (%s, %s, %s)'
+                valores = [voto, protocolo_criptografado, data_hora]
+                conexaobd.cursor.execute(sql, valores)
+                conexaobd.conexao.commit()
+
+                sql = 'UPDATE eleitores SET status_de_voto = TRUE WHERE numero_titulo = %s'
+                valores = [titulo_eleitor]
+                conexaobd.cursor.execute(sql, valores)
+                conexaobd.conexao.commit()
+                print('Voto registrado com sucesso!')
+                print(f'Protocolo da votação: {protocolo}')
+                registrar_log('SUCESSO: Voto registrado com sucesso')
+                input('Precione enter para continuar! ')
             case 2:
                 print('\n======================================')
                 print('         Encerrando votação')
@@ -244,6 +251,7 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
 
                     if mesario == None:
                         print('Mesario não encontrado no sistema! Faça o login novamente')
+                        registrar_log('ALERTA: Tentativa de acesso negada')
                         continue
                     
                     #guarda os valores do banco de dados e depois verifica se pode encerrar a votação
@@ -252,23 +260,36 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                     status_mesario = mesario[2]
                         #verificando se o cpf está correto:
                     if cpf != cpf_mesario[0:4]:
-                        print('Erro ao validar dados! CPF incorreto!')
+                        print('\nErro ao validar dados! CPF incorreto!\nFaça o login novamente:')
+                        registrar_log('ALERTA: Tentativa de acesso negada')
                         continue
                         #verificando chave de acesso
-                    if chave_acesso != chave_mesario:
-                        print('Erro ao validar dados! Chave de acesso incorreta!')
+                    elif chave_acesso != chave_mesario:
+                        print('\nErro ao validar dados! Chave de acesso incorreta!\nFaça o login novamente:')
+                        registrar_log('ALERTA: Tentativa de acesso negada')
                         continue
                         #verificando se é mesário
-                    if status_mesario == False:
-                        print('Você não tem permição para encerrar o sistema!')
+                    elif status_mesario == False:
+                        print('\nVocê não tem permição para encerrar o sistema!\nFaça o login novamente:')
+                        registrar_log('ALERTA: Tentativa de acesso negada')
                         continue
                     
                     encerrando = str(input('\nDeseja realmente encerrar a votação [S/N]? '))
+                    chave_acesso = str(input('\nConfirme a sua chave de acesso: '))
                     while encerrando.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
                         encerrando = str(input(f'Escolha uma oção válida[S/N]: '))
                     if encerrando.lower() in ['s', 'sim']:
+                        while chave_acesso != chave_mesario:
+                            print('\nErro ao validar chave de acesso!')
+                            chave_acesso = str(input('\nConfirme a sua chave de acesso: '))
+                            registrar_log('ALERTA: Erro ao validar chave de acesso!')
+                            encerrando = 'n'
+                            continue
+
                         encerrar = 2
                         print('\nVotação encerrada com sucesso!')
+                        registrar_log('Votação encerrada')
+                        break
                     else:                   
                         encerrar = 1
                         break

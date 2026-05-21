@@ -65,7 +65,6 @@ def modVotacao():
             chave_acesso = str(input('Digite a sua chave de acesso: '))
 
             funcoesVotacao.sistema_votacao(titulo_eleitor, cpf, chave_acesso)
-            funcoesVotacao.registrar_log('Sistema de votação foi aberto')
             input('Precione enter para voltar à tela inicial! ')
         #auditoria
         case 2:
