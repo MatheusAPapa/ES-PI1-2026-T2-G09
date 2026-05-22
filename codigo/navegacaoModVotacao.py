@@ -23,8 +23,8 @@ def modResultado():
     match opcaoResulVota:
         #boletim de urna
         case 1:
-            print('Boletim de urna')
-            exit()
+            funcoesVotacao.boletim_urna()
+            input('\nPrecione enter para voltar à tela inicial! ')
         #estatísticas por candidato
         case 2:
             print('Estatisticas')

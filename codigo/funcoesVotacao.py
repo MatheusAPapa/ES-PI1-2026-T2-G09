@@ -265,4 +265,21 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
 def boletim_urna():
     conexaobd.cursor.execute
     resultados = conexaobd.cursor.fetchall()
-    
+    print('\n======================================')
+    print('              Boletim de Urna')
+    print('======================================')
+
+    if not resultados:
+        print("  Nenhum candidato cadastrado.")
+        print("================================================\n")
+        return
+    vencedor = None
+    max_votos = -1
+
+    for nome, numero, partido, total_votos in resultados:
+        print(f"  {nome} (Nº {numero} - {partido}): {total_votos} voto(s)")
+        if total_votos > max_votos:
+            max_votos = total_votos
+            vencedor = (nome, numero, partido, total_votos)
+        print(f"\nVencedor: {vencedor[0]}")
+        print(f"Numero: {vencedor[1]}  |  Partido: {vencedor[2]}  |  Votos: {vencedor[3]}") 
