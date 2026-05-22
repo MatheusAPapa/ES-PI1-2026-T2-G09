@@ -27,7 +27,6 @@ def modResultado():
         case 1:
             funcoesVotacao.boletim_urna()
             input('\nPressione Enter para voltar!')
-            funcoesVotacao.registrar_log('Boletim de Urna impresso.')
         #estatística total
         case 2:
             funcoesVotacao.estatisticas_comparecimento()
@@ -40,7 +39,6 @@ def modResultado():
         case 4:
             funcoesVotacao.validar_integridade()
             input('\nPressione Enter para voltar!')
-            funcoesVotacao.registrar_log('Resultados Validados.')
         case 5:
             modVotacao()
 
@@ -71,6 +69,7 @@ def modVotacao():
             modAuditoria()
         #resultado
         case 3:
+            
             modResultado()
         #voltar
         case 4:

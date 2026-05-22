@@ -1,12 +1,15 @@
-10/05/2026 - 19:08:48 -> Foi alterado os dados de um eleitor.
-14/05/2026 - 20:42:16 -> Novo eleitor cadastrado.
-2026/05/18 - 14:45:13 -> Novo eleitor cadastrado.
-2026/05/18 - 15:09:20 -> Novo eleitor cadastrado.
-2026-05-18 - 15:29:29 -> Novo eleitor cadastrado.
-2026-05-18 - 15:35:44 -> Foi alterado os dados de um eleitor.
-2026-05-18 - 15:36:56 -> Foi alterado os dados de um eleitor.
-2026-05-18 - 15:39:52 -> Foi alterado os dados de um eleitor.
-2026-05-18 - 15:52:01 -> Novo eleitor cadastrado.
-2026-05-18 - 15:53:46 -> Um eleitor foi removido do sistema.
-2026-05-18 - 16:02:31 -> Novo eleitor cadastrado.
-2026-05-18 - 16:05:47 -> Foi alterado os dados de um eleitor.
+2026-05-21 - 16:50:08 -> ALERTA: Tentativa de acesso negada
+2026-05-21 - 16:50:26 -> ALERTA: Tentativa de acesso negada
+2026-05-21 - 16:50:45 -> ABERTURA: Sistema de votação aberto com sucesso
+2026-05-21 - 16:50:49 -> Zerézima realizada, total de votos zerado
+2026-05-21 - 16:51:09 -> ALERTA: Tentativa de acesso negada
+2026-05-21 - 16:51:36 -> ALERTA: Erro ao validar chave de acesso!
+2026-05-21 - 16:51:36 -> Votação encerrada
+2026-05-22 - 10:23:51 -> ABERTURA: Sistema de votação aberto com sucesso
+2026-05-22 - 10:23:54 -> Zerézima realizada, total de votos zerado
+2026-05-22 - 10:24:46 -> ABERTURA: Sistema de votação aberto com sucesso
+2026-05-22 - 10:24:48 -> Zerézima realizada, total de votos zerado
+2026-05-22 - 10:42:41 -> ABERTURA: Sistema de votação aberto com sucesso
+2026-05-22 - 10:42:42 -> Zerézima realizada, total de votos zerado
+2026-05-22 - 10:43:11 -> SUCESSO: Voto registrado com sucesso
+2026-05-22 - 10:43:40 -> Votação encerrada
