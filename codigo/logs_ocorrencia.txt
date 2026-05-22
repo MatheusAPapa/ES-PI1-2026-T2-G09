@@ -5,3 +5,11 @@
 2026-05-21 - 16:51:09 -> ALERTA: Tentativa de acesso negada
 2026-05-21 - 16:51:36 -> ALERTA: Erro ao validar chave de acesso!
 2026-05-21 - 16:51:36 -> Votação encerrada
+2026-05-22 - 10:23:51 -> ABERTURA: Sistema de votação aberto com sucesso
+2026-05-22 - 10:23:54 -> Zerézima realizada, total de votos zerado
+2026-05-22 - 10:24:46 -> ABERTURA: Sistema de votação aberto com sucesso
+2026-05-22 - 10:24:48 -> Zerézima realizada, total de votos zerado
+2026-05-22 - 10:42:41 -> ABERTURA: Sistema de votação aberto com sucesso
+2026-05-22 - 10:42:42 -> Zerézima realizada, total de votos zerado
+2026-05-22 - 10:43:11 -> SUCESSO: Voto registrado com sucesso
+2026-05-22 - 10:43:40 -> Votação encerrada

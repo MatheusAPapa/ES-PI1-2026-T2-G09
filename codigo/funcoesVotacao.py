@@ -30,6 +30,9 @@ def gerar_protocolo_votacao (candidato):
     letras_aleatorias = ''.join(random.choices(alfabeto, k=2))
     numeros_aleatorios = random.randint(10000, 99999)
 
+    #todo protocolo nulo terá 'NL" ao invés do número do candidato
+    if candidato == None:
+        candidato = 'NL'
     protocolo = 'V' + letras_aleatorias + '26' + str(candidato) + str(numeros_aleatorios)
     protocolo_criptografado = criptografia_descriptografia.criptografar(protocolo)
     return protocolo, protocolo_criptografado
@@ -196,24 +199,28 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                     valores = [voto]
                     conexaobd.cursor.execute(sql, valores)
                     candidato = conexaobd.cursor.fetchone()
-                    while candidato == None:
-                        print('Candidato não encontrado!')
-                        voto = int(input('Digite o número de um candidato existente: '))
-                        sql = ('SELECT nome, partido FROM candidatos WHERE numero=%s')
-                        valores = [voto]
-                        conexaobd.cursor.execute(sql, valores)
-                        candidato = conexaobd.cursor.fetchone()
-                    
-                    print(f'''
-                    ======================================
-                                Candidato
-                    ======================================
-                    Candidato: {candidato[0]}
-                    Partido: {candidato[1]}
-                    ''')
-                    confirmacao = str(input(f'Confirme o voto [S - votar em {candidato[0]}/N - votar em outra pessoa]: '))
-                    while confirmacao.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
-                        confirmacao = str(input(f'Escolha uma oção válida[S/N]: '))
+                    if candidato == None:
+                        print('Voto nulo.')
+                        confirmacao = str(input(f'VocÊ deseja votar nulo? [S - votar nulo/N - votar em outra pessoa]: '))
+                        while confirmacao.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
+                            confirmacao = str(input(f'Escolha uma oção válida[S/N]: '))
+                        if confirmacao.lower() in ['s', 'sim']:
+                            voto = None
+                            break
+                        else:
+                            continue
+                        
+                    else:
+                        print(f'''
+                ======================================
+                            Candidato
+                ======================================
+                        Candidato: {candidato[0]}
+                        Partido: {candidato[1]}
+                        ''')
+                        confirmacao = str(input(f'Confirme o voto [S - votar em {candidato[0]}/N - votar em outra pessoa]: '))
+                        while confirmacao.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
+                            confirmacao = str(input(f'Escolha uma oção válida[S/N]: '))
             
                 #computar voto
                 protocolo, protocolo_criptografado = gerar_protocolo_votacao(voto)
