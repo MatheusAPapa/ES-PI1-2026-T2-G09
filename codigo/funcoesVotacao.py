@@ -6,7 +6,8 @@ import os
 import criptografia_descriptografia
 
 def registrar_log(mensagem):
-    #regista a hora que ocorrerá o log
+    #função que registra a hora que ocorrerá o log, parametro é a mensagem do log.
+
     data_hora = datetime.now().strftime("%Y-%m-%d - %H:%M:%S")
     
     #tenta registra o log no arquivo txt, caso não de mostrará uma mensagem de erro
@@ -26,6 +27,8 @@ def exibir_logs ():
         print('Arquivo não encontrado')
 
 def gerar_protocolo_votacao (candidato):
+    #Função que gera o protocolo de votação a partir do candidato que votou.
+
     alfabeto = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M','N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
     letras_aleatorias = ''.join(random.choices(alfabeto, k=2))
     numeros_aleatorios = random.randint(10000, 99999)
@@ -38,6 +41,8 @@ def gerar_protocolo_votacao (candidato):
     return protocolo, protocolo_criptografado
 
 def exibir_protocolos():
+    #Função para fazer a listagem dos protocólos de votação
+
     conexaobd.cursor.execute("SELECT protocolo_voto, data_hora FROM votos")
     resultados = conexaobd.cursor.fetchall()
 
@@ -95,7 +100,8 @@ def verificar_eleitor(titulo_eleitor, cpf_eleitor, chave_acesso_eleitor):
     return True
 
 def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
-    
+    #função para iniciar sistema de votação, parametros: título, CPF, chave de acesso, do usuário para verficar se é mesário
+
     #pega os dados de quem ta abrindo o sistema no banco de dados
     sql = ('SELECT cpf, numero_titulo, mesario, chave_acesso FROM eleitores WHERE numero_titulo=%s')
     values = [titulo_abrindo]
@@ -304,6 +310,8 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
 
 
 def boletim_urna():
+    #Função para visualizar o boletim de urna
+
     cursor = conexaobd.conexao.cursor()
     cursor.execute("""
         SELECT c.nome, c.numero, c.partido, COUNT(v.voto) AS total_votos
@@ -327,13 +335,15 @@ def boletim_urna():
         if total_votos > max_votos:
             max_votos = total_votos
             vencedor = (nome, numero, partido, total_votos)
-        if vencedor:
-            print(f"\n  Vencedor: {vencedor[0]}")
-            print(f"  Numero: {vencedor[1]}  |  Partido: {vencedor[2]}  |  Votos: {vencedor[3]}")
+    if vencedor:
+        print(f"\n  Vencedor: {vencedor[0]}")
+        print(f"  Numero: {vencedor[1]}  |  Partido: {vencedor[2]}  |  Votos: {vencedor[3]}")
     cursor.close()
 
 
 def estatisticas_comparecimento():
+    #função para mostrar o percentual de eleitores que votaram.
+
     cursor = conexaobd.conexao.cursor()
     cursor.execute("SELECT COUNT(*) FROM eleitores")
     total_eleitores = cursor.fetchone()[0]
@@ -351,6 +361,8 @@ def estatisticas_comparecimento():
     cursor.close()
 
 def votor_por_partido():
+    #Função para mostrar o relatório de votos por partido.
+
     cursor = conexaobd.conexao.cursor()
     cursor.execute("""
     SELECT c.partido, COUNT(v.voto) AS total_votos
@@ -387,6 +399,7 @@ def votor_por_partido():
     cursor.close()
 
 def validar_integridade():
+    #Função para validar a integridade da votação a partir da diferença de pessoas que votaram e eleitores cadastrados.
     cursor = conexaobd.conexao.cursor()
     cursor.execute("SELECT COUNT(*) FROM votos")
     total_votos_urna = cursor.fetchone()[0]
