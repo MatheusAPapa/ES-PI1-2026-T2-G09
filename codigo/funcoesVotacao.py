@@ -83,6 +83,7 @@ def verificar_eleitor(titulo_eleitor, cpf_eleitor, chave_acesso_eleitor):
     
     #verificando se a chave de acesso comfere com a do banco
     if chave_acesso_eleitor != chave_banco:
+        print('Valídação dos dados falhou, pois a chave de acessa está errada\n')
         return False
 
     #verificando se o eleitor já votou
@@ -267,7 +268,7 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                     status_mesario = mesario[2]
                         #verificando se o cpf está correto:
                     if cpf != cpf_mesario[0:4]:
-                        print('\nErro ao validar dados! CPF incorreto!\nFaça o login novamente:')
+                        print('\nErro ao validar dados! CPF incorreto! Faça o login novamente!')
                         registrar_log('ALERTA: Tentativa de acesso negada')
                         continue
                         #verificando chave de acesso
@@ -360,6 +361,14 @@ def votor_por_partido():
     """)
     resultados = cursor.fetchall()
 
+    #conta a quantidade total de votos registrados
+    cursor.execute("SELECT COUNT(*) FROM votos")
+    total_geral = cursor.fetchone()[0]
+
+    #conta a quantidade de votos nulos
+    cursor.execute("SELECT COUNT(*) FROM votos WHERE voto IS NULL OR voto = 0")
+    votos_nulos = cursor.fetchone()[0]
+
     print("\n======================================")
     print("         Voto(s) por partido")
     print("======================================")
@@ -368,7 +377,13 @@ def votor_por_partido():
         print("Nenhum partido encontrado")
     else:
         for partido, total in resultados:
-            print(f"Partido:{partido}:{total} voto(s)")
+            #cauculando a porcentagem de votos de cada partido
+            porcentagem = (total / total_geral * 100) if total_geral > 0 else 0
+            print(f"Partido: {partido}: {total} voto(s) - {porcentagem:.1f}%")
+        #cauculando a porcentagem de votos nulos
+        porcentagem_nulos = (votos_nulos / total_geral * 100) if total_geral > 0 else 0
+        print(f"Votos nulos: {votos_nulos} ({porcentagem_nulos:.1f}%)")
+        
     cursor.close()
 
 def validar_integridade():
@@ -381,11 +396,11 @@ def validar_integridade():
     print("\n======================================")
     print("        Validação de Integridade")
     print("======================================")
-    print(f"Votos registrados na urna    :{total_votos_urna}")
-    print(f"Eleitores com status Ja Votou:{total_ja_votou}")
+    print(f"Votos registrados na urna    : {total_votos_urna}")
+    print(f"Eleitores com status Ja Votou: {total_ja_votou}")
     if total_votos_urna == total_ja_votou:
-        print("Integridade confirmada")
+        print("\nIntegridade confirmada!")
     else:
         print("ATENÇÃO: os números não coincidem")
-        print("Possível inconsistência")
+        print("Possível inconsistência na votação!")
         

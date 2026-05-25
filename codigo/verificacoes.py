@@ -1,7 +1,7 @@
 def verificarCPF (cpf):
     #verifica se o cpf tem 11 números
     if len(cpf) != 11:
-        print('CPF não possui 11 números')
+        print('CPF não possui 11 números!')
         return False
     
     #verifica se tem letra no meio do cpf
@@ -10,7 +10,7 @@ def verificarCPF (cpf):
     
     #verifica se todos os digitos do cpf são iguais, pois assim ele passa na conta que verifica o CPF
     elif cpf == cpf[0] * 11:
-        print('CPF inválidado')
+        print('CPF inválidado!')
         return False
     
     #verificar se o primeiro digito verificador está correto
@@ -42,7 +42,7 @@ def verificarCPF (cpf):
         digito2 = 0
 
     if digito2 != int(cpf[10]):
-        print('CPF inválidado')
+        print('CPF inválidado!')
         return False
     else:
         return True
@@ -53,6 +53,7 @@ def verificarTitulo (titulo):
     titulo = titulo.strip()
     #verificar se tem 12 digitos 
     if len(titulo) != 12:
+        print('Titulo de eleitor não possui 12 dígitos')
         return False
     
     #separando o titulo de eleitor em partes
@@ -101,4 +102,5 @@ def verificarTitulo (titulo):
     if dv_informado == dv_verificado:
         return True
     else:
+        print('Titulo de eleitor inválido')
         return False

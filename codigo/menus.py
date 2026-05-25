@@ -33,7 +33,7 @@ def menuModGere ():
           
     1 - Cadastrar eleitor 
     2 - Editar dados do eleitor
-    3 - Todos os eleitores
+    3 - Listar todos os eleitores
     4 - Buscar eleitor
     5 - Remover eleitor 
     6 - Voltar para menu anterior   
@@ -41,12 +41,12 @@ def menuModGere ():
     ====================================
           
     ''')
-    opcao = int(input('Selecione uma das opções acima: '))
+    opcao = int(input('\nSelecione uma das opções acima: '))
    
     #verificação de escolha válida
     while opcao not in (1, 2, 3, 4, 5, 6):
         print('Opção inválida!')
-        opcao = int(input('Selecione um opção válida: '))
+        opcao = int(input('\nSelecione um opção válida: '))
     return opcao
 
 #modulo de votação
@@ -105,9 +105,8 @@ def menuResulVota ():
           
     1 - Boletim de urna
     2 - Estatísticas 
-    3 - Votos por partido
-    4 - Validar votação
-    5 - Voltar para menu anterior
+    3 - Validar votação
+    4 - Voltar para menu anterior
           
     ====================================
           
@@ -115,7 +114,7 @@ def menuResulVota ():
     opcao = int(input('Selecione uma das opções acima: '))
     
     #verificação de escolha válida
-    while opcao not in (1, 2, 3, 4, 5):
+    while opcao not in (1, 2, 3, 4):
         print('Opção inválida!')
         opcao = int(input('Selecione um opção válida: '))
     return opcao
