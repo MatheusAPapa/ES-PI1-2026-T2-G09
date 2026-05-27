@@ -1,4 +1,5 @@
 import os
+from verificacoes import ler_opcao
 
 #menu inicial
 def menuInic ():
@@ -15,12 +16,12 @@ def menuInic ():
     ====================================
           
     ''')
-    escolha = int(input('Qual módulo você deseja entrar? '))
+    escolha = ler_opcao('Qual módulo você deseja entrar? ')
     
     #verificação de escolha válida
     while escolha not in (1, 2, 3):
         print('Opção inválida!')
-        escolha = int(input('Selecione um opção válida: '))
+        escolha = ler_opcao('Selecione um opção válida: ')
     return escolha
 
 #modulo de gerenciamento
@@ -41,12 +42,12 @@ def menuModGere ():
     ====================================
           
     ''')
-    opcao = int(input('\nSelecione uma das opções acima: '))
+    opcao = ler_opcao('\nSelecione uma das opções acima: ')
    
     #verificação de escolha válida
     while opcao not in (1, 2, 3, 4, 5, 6):
         print('Opção inválida!')
-        opcao = int(input('\nSelecione um opção válida: '))
+        opcao = ler_opcao('\nSelecione um opção válida: ')
     return opcao
 
 #modulo de votação
@@ -65,12 +66,12 @@ def menuModVota ():
     ====================================
           
     ''')
-    opcao = int(input('Selecione uma das opções acima: '))
+    opcao = ler_opcao('Selecione uma das opções acima: ')
 
     #verificação de escolha válida
     while opcao not in (1, 2, 3, 4):
         print('Opção inválida!')
-        opcao = int(input('Selecione um opção válida: '))
+        opcao = ler_opcao('Selecione um opção válida: ')
     return opcao
 
 def menuAudVota ():
@@ -87,12 +88,12 @@ def menuAudVota ():
     ====================================
           
     ''')
-    opcao = int(input('Selecione uma das opções acima: '))
+    opcao = ler_opcao('Selecione uma das opções acima: ')
 
     #verificação de escolha válida
     while opcao not in (1, 2, 3):
         print('Opção inválida!')
-        opcao = int(input('Selecione um opção válida: '))
+        opcao = ler_opcao('Selecione um opção válida: ')
     
     return opcao
 
@@ -111,10 +112,10 @@ def menuResulVota ():
     ====================================
           
     ''')
-    opcao = int(input('Selecione uma das opções acima: '))
+    opcao = ler_opcao('Selecione uma das opções acima: ')
     
     #verificação de escolha válida
     while opcao not in (1, 2, 3, 4):
         print('Opção inválida!')
-        opcao = int(input('Selecione um opção válida: '))
+        opcao = ler_opcao('Selecione um opção válida: ')
     return opcao

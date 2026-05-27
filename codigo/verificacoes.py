@@ -104,3 +104,14 @@ def verificarTitulo (titulo):
     else:
         print('Titulo de eleitor inválido')
         return False
+    
+def ler_opcao (mensagem):
+    #função que faz a leitura da opção de entrar nos menus, ela faz o tratamento de erros que o usuário pode gerar, como digitar letras ou dar enter sem nada escrito, assim evitando o travamento do sistema 
+    opcao = ''
+    while opcao.isnumeric() == False:
+        try: 
+            opcao = int(input(mensagem))
+            return opcao
+        except ValueError: 
+            print('Opção inválida! Digite apenas números')
+            opcao = ''

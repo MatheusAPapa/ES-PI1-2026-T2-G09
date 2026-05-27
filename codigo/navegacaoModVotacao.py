@@ -46,12 +46,12 @@ def modResultado():
     ====================================
           
                 ''')
-                    opcaoEstats = int(input('Selecione uma das opções acima: '))
+                    opcaoEstats = verificacoes.ler_opcao('Selecione uma das opções acima: ')
             
                     #verificação de escolha válida
                     while opcaoEstats not in (1, 2, 3):
                         print('Opção inválida!')
-                        opcaoEstats = int(input('Selecione um opção válida: '))
+                        opcaoEstats = verificacoes.ler_opcao('Selecione um opção válida: ')
                     match opcaoEstats:
                         case 1:
                             #estatísticas de comparecimento

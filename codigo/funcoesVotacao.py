@@ -43,7 +43,7 @@ def gerar_protocolo_votacao (candidato):
 def exibir_protocolos():
     #Função para fazer a listagem dos protocólos de votação
 
-    conexaobd.cursor.execute("SELECT protocolo_voto, data_hora FROM votos")
+    conexaobd.cursor.execute("SELECT protocolo_voto, data_hora FROM votos ORDER BY protocolo_voto ASC")
     resultados = conexaobd.cursor.fetchall()
 
     print("\n================================================")
@@ -106,7 +106,14 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
     sql = ('SELECT cpf, numero_titulo, mesario, chave_acesso FROM eleitores WHERE numero_titulo=%s')
     values = [titulo_abrindo]
     conexaobd.cursor.execute(sql, values)
-    cpf, numero_titulo, mesario, chave_acesso = conexaobd.cursor.fetchone()
+    resultado = conexaobd.cursor.fetchone()
+
+    #verificando se o título está cadastrado no banco
+    if resultado is None:
+        print('\nEleitor não encontrado no sistema!')
+        registrar_log('ALERTA: Tentativa de acesso negada')
+        return
+    cpf, numero_titulo, mesario, chave_acesso = resultado
 
     # descriptografando
     cpf = criptografia_descriptografia.descriptografar(cpf)
@@ -131,7 +138,6 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
         return
     else:
         print('\nSistema de votação aberto com sucesso!')
-        registrar_log('ABERTURA: Sistema de votação aberto com sucesso')
     
     #fazendo a zerézima
     input('Precione enter para iniciar a zerézima! ')
@@ -158,7 +164,7 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
     print('=================================================\n')
     
     input('Precione enter para iniciar a votação! ')
-    registrar_log('Zerézima realizada, total de votos zerado')      
+    registrar_log('ABERTURA: Votação iniciada com sucesso. Total de votos zerado.')      
 
     os.system('cls')
     #computação dos votos
@@ -173,9 +179,9 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
         print('2 - Encerrar votação')
         print('===================================\n')
 
-        encerrar = int(input('Digite a ação desejada: '))
+        encerrar = verificacoes.ler_opcao('Digite a ação desejada: ')
         while encerrar not in [1, 2]: 
-            encerrar = int(input('Digite a ação desejada: '))
+            encerrar = verificacoes.ler_opcao('Digite a ação desejada: ')
         
         os.system('cls')
         match encerrar:
@@ -201,7 +207,16 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                 print('\nEleitor encontrado!')
                 confirmacao = 'n'
                 while confirmacao.lower() not in ['s', 'sim']:
-                    voto = int(input('\nDigite o número do candidato para votar: '))
+                    #verificando se o voto é um número e pedindo para o usuário digitar novamente caso contrário
+                    voto = ''
+                    while voto.isnumeric() == False:
+                        try:
+                            voto = (input('\nDigite o número do candidato para votar: '))
+                            voto = int(voto)
+                            break
+                        except ValueError:
+                            print('Digite apenas números!')
+    
                     sql = ('SELECT nome, partido FROM candidatos WHERE numero=%s')
                     valores = [voto]
                     conexaobd.cursor.execute(sql, valores)
@@ -231,7 +246,7 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
             
                 #computar voto
                 protocolo, protocolo_criptografado = gerar_protocolo_votacao(voto)
-                data_hora = datetime.now().strftime("%Y/%m/%d - %H:%M:%S")
+                data_hora = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 sql = 'INSERT INTO votos (voto, protocolo_voto, data_hora) VALUES (%s, %s, %s)'
                 valores = [voto, protocolo_criptografado, data_hora]
                 conexaobd.cursor.execute(sql, valores)
@@ -289,10 +304,10 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                         continue
                     
                     encerrando = str(input('\nDeseja realmente encerrar a votação [S/N]? '))
-                    chave_acesso = str(input('\nConfirme a sua chave de acesso: '))
                     while encerrando.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
                         encerrando = str(input(f'Escolha uma oção válida[S/N]: '))
                     if encerrando.lower() in ['s', 'sim']:
+                        chave_acesso = str(input('\nConfirme a sua chave de acesso: '))
                         while chave_acesso != chave_mesario:
                             print('\nErro ao validar chave de acesso!')
                             chave_acesso = str(input('\nConfirme a sua chave de acesso: '))
@@ -302,7 +317,7 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
 
                         encerrar = 2
                         print('\nVotação encerrada com sucesso!')
-                        registrar_log('Votação encerrada')
+                        registrar_log('ENCERRAMENTO: Votação finalizada com sucesso.')
                         break
                     else:                   
                         encerrar = 1

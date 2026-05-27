@@ -146,11 +146,11 @@ def alterar_dados_eleitor(cpf):
         print("3 - CPF")
         print("4 - Status de mesário")
         print("0 - Cancelar")
-        opcao = int(input("\nEscolha uma opção: "))
+        opcao = verificacoes.ler_opcao("\nEscolha uma opção: ")
 
         while opcao not in [0, 1, 2, 3, 4]:
             print("\n❌ Opção inválida!")
-            opcao = int(input("\nEscolha uma opção válida: "))
+            opcao = verificacoes.ler_opcao("\nEscolha uma opção válida: ")
 
         match opcao:
             case 0:
@@ -184,11 +184,11 @@ def alterar_dados_eleitor(cpf):
                 print("Eleitor é mesário?")
                 print("1 - Sim")
                 print("2 - Não")
-                opcao_mesario = int(input("Escolha: "))
+                opcao_mesario = verificacoes.ler_opcao("Escolha: ")
 
                 while opcao_mesario not in [1, 2]:  
                     print('Opção inválida!')
-                    opcao_mesario = int(input("Escolha: "))
+                    opcao_mesario = verificacoes.ler_opcao("Escolha: ")
 
                 novo_valor = opcao_mesario == 1 
                 sql = "UPDATE eleitores SET mesario = %s WHERE cpf = %s"
