@@ -394,7 +394,7 @@ def votor_por_partido():
             print(f"Partido: {partido}: {total} voto(s) - {porcentagem:.1f}%")
         #cauculando a porcentagem de votos nulos
         porcentagem_nulos = (votos_nulos / total_geral * 100) if total_geral > 0 else 0
-        print(f"Votos nulos: {votos_nulos} ({porcentagem_nulos:.1f}%)")
+        print(f"Votos nulos: {votos_nulos} - {porcentagem_nulos:.1f}%")
         
     cursor.close()
 

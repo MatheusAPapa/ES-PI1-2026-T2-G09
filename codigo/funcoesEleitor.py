@@ -61,18 +61,18 @@ def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
             #verificando duplicidade do cpf
             if "cpf" in str(err).lower():
                 print("\n❌ Erro: Este CPF já está cadastrado no sistema!")
-                input("\nPressione Enter para voltar a tela inicial...")
+                input("\nPressione Enter para voltar!")
                 
             #verificando duplicidade de título de eleitor
             if "numero_titulo" in str(err).lower():
                 print("\n❌ Erro: Este título de eleitor já está cadastrado no sistema!")
-                input("\nPressione Enter para voltar a tela inicial...")
+                input("\nPressione Enter para voltar!")
         else:
             print(f"\n❌ Erro: {err}")
             
     except mysql.connector.Error as err:
         print(f"\n❌ Erro ao cadastrar no banco de dados: {err}")
-        input('\nPrecione enter para voltar à tela inicial! ')
+        input('\nPrecione enter para voltar! ')
 
 def listar_eleitores():
     # faz a listagem de todos os eleitores cadastrados no banco de dados, mostrando o nome, se é mesário e se já votou
@@ -81,7 +81,7 @@ def listar_eleitores():
     contador = 0
     for (nome, mesario, status_de_voto) in conexaobd.cursor.fetchall():
         contador += 1
-        print(f'Eleitor {contador + 1}: Nome: {nome} - Mesario: {mesario} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
+        print(f'Eleitor {contador} -> Nome: {nome} - Mesario: {'mesario' if mesario == 1 else 'não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
     
 def busca_eleitores(cpf):
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
@@ -217,7 +217,7 @@ def alterar_dados_eleitor(cpf):
         print(f"CPF: {criptografia_descriptografia.descriptografar(cpf).rstrip('A')}")
         print(f"Chave de acesso: {criptografia_descriptografia.descriptografar(chave_acesso).rstrip('A')}")
         print(f"Mesário: {'Sim' if mesario == 1 else 'Não'}")
-        input("\nPressione Enter para voltar a tela inicial...")
+        input("\nPressione Enter para voltar!")
         funcoesVotacao.registrar_log('Foi alterado os dados de um eleitor.')
    
     except mysql.connector.IntegrityError as err:
@@ -227,8 +227,8 @@ def alterar_dados_eleitor(cpf):
             print("\n❌ Erro: Este título já está cadastrado no sistema!")
         else:
             print(f"\n❌ Erro: {err}")
-        input('\nPrecione enter para voltar à tela inicial! ')
+        input('\nPrecione enter para voltar! ')
 
     except mysql.connector.Error as err:
         print(f"\n❌ Erro ao editar no banco de dados: {err}")
-        input('\nPrecione enter para voltar à tela inicial! ')
+        input('\nPrecione enter para voltar! ')

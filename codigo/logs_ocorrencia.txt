@@ -44,3 +44,9 @@
 2026-05-24 - 20:31:35 -> ALERTA: Tentativa de acesso negada
 2026-05-24 - 20:31:46 -> ALERTA: Tentativa de acesso negada
 2026-05-24 - 20:32:35 -> Votação encerrada
+2026-05-25 - 10:41:43 -> Novo eleitor cadastrado.
+2026-05-25 - 11:31:56 -> ABERTURA: Sistema de votação aberto com sucesso
+2026-05-25 - 11:32:01 -> Zerézima realizada, total de votos zerado
+2026-05-25 - 11:32:51 -> SUCESSO: Voto registrado com sucesso
+2026-05-25 - 11:33:33 -> SUCESSO: Voto registrado com sucesso
+2026-05-25 - 11:34:16 -> Votação encerrada

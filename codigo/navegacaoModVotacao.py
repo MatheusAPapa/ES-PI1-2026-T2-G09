@@ -41,7 +41,7 @@ def modResultado():
           
     1 - Estatísticas de comparencimento
     2 - Votos por partido
-    3 - Voltar para voltar
+    3 - Voltar para o menu anterior
 
     ====================================
           

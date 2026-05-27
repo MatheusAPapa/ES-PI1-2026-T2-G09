@@ -29,3 +29,7 @@ protocolo_voto VARCHAR(100) UNIQUE,
 voto int,
 data_hora DATETIME
 );
+
+ALTER TABLE eleitores
+MODIFY cpf VARCHAR(12),
+MODIFY chave_acesso VARCHAR(8);

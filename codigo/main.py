@@ -60,8 +60,9 @@ while escolha != 3:
 
                     #listagem de todos os eleitores
                     case 3:
+                        os.system('cls')
                         funcoesEleitor.listar_eleitores()
-                        input('\nPrecione enter para voltar à tela inicial! ')
+                        input('\nPrecione enter para voltar! ')
                     
                     #fazer uma busca por eleitor
                     case 4:
@@ -74,7 +75,7 @@ while escolha != 3:
                             cpf = str(input('Informe o CPF do eleitor: '))
                         
                         funcoesEleitor.busca_eleitores(cpf)
-                        input('\nPrecione enter para voltar à tela inicial! ')
+                        input('\nPrecione enter para voltar! ')
                     
                     #remover um eleitor
                     case 5:
@@ -94,7 +95,7 @@ while escolha != 3:
                             titulo_eleitor = str(input('Informe o título de eleitor: '))
 
                         funcoesEleitor.deletar_eleitor(cpf, titulo_eleitor)
-                        input('\nPrecione enter para voltar à tela inicial! ')
+                        input('\nPrecione enter para voltar! ')
                         funcoesVotacao.registrar_log('Um eleitor foi removido do sistema.')
 
                     #voltar
