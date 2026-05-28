@@ -1,19 +1,20 @@
+# Verifica se o CPF é valido
 def verificarCPF (cpf):
-    #verifica se o cpf tem 11 números
+    # Verifica se o cpf tem 11 números
     if len(cpf) != 11:
         print('CPF não possui 11 números!')
         return False
     
-    #verifica se tem letra no meio do cpf
+    # Verifica se tem letra no meio do cpf
     elif cpf.isdigit() == False:
         return False
     
-    #verifica se todos os digitos do cpf são iguais, pois assim ele passa na conta que verifica o CPF
+    # Verifica se todos os digitos do cpf são iguais, pois assim ele passa na conta que verifica o CPF
     elif cpf == cpf[0] * 11:
         print('CPF inválidado!')
         return False
     
-    #verificar se o primeiro digito verificador está correto
+    # Verificar se o primeiro digito verificador está correto
     soma1 = 0
     contador1 = 10
     for i in range(9):
@@ -29,7 +30,7 @@ def verificarCPF (cpf):
         print('CPF inválidado')
         return False
     
-    #verificar se o segundo digito verificador está correto
+    # Verificar se o segundo digito verificador está correto
     soma2 = 0
     contador2 = 11
     for i in range(10):
@@ -46,22 +47,22 @@ def verificarCPF (cpf):
         return False
     else:
         return True
-
+# Verifica se numero de titulo do eleitor é valido
 def verificarTitulo (titulo):
     titulo = str(titulo)
-    #remover os espaços em branco, caso tenha
+    # Remover os espaços em branco, caso tenha
     titulo = titulo.strip()
-    #verificar se tem 12 digitos 
+    # Verificar se tem 12 digitos 
     if len(titulo) != 12:
         print('Titulo de eleitor não possui 12 dígitos')
         return False
     
-    #separando o titulo de eleitor em partes
+    # Separando o titulo de eleitor em partes
     numeros = titulo[:8]
     uf = titulo[8: 10]
     dv_informado = titulo[10:]
 
-    #descobrindo o 1º dígito verificador
+    # Descobrindo o 1º dígito verificador
     soma1 = 0
     multiplicador = 2
     for i in numeros:
@@ -72,7 +73,7 @@ def verificarTitulo (titulo):
 
     if resto1 == 10:
         dv1 = 0
-    #verificando se é de sp ou minas e se o resto da divisão é igual a 0
+    # Verificando se é de sp ou minas e se o resto da divisão é igual a 0
     elif uf == '01' or uf == '02':
         if resto1 == 0:
             dv1 = 1
@@ -82,12 +83,12 @@ def verificarTitulo (titulo):
         dv1 = resto1
     
 
-    #descobrindo o 2º dígito verificador
+    # Descobrindo o 2º dígito verificador
     soma2 = int(uf[0]) * 7 + int(uf[1]) * 8 + dv1 * 9
     resto2 = soma2 % 11
     if resto2 == 10:
         dv2 = 0
-    #verificando se é de sp ou minas e se o resto da divisão é igual a 0
+    # Verificando se é de sp ou minas e se o resto da divisão é igual a 0
     elif uf == '01' or uf == '02':
         if resto2 == 0:
             dv2 = 1
@@ -98,7 +99,7 @@ def verificarTitulo (titulo):
 
     dv_verificado = str(dv1) + str(dv2)
     
-    #verificação final
+    # Verificação final
     if dv_informado == dv_verificado:
         return True
     else:

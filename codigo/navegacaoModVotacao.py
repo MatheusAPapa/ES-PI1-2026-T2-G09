@@ -2,35 +2,35 @@ import menus
 import funcoesVotacao
 import verificacoes
 import os
-
+# Funcionamento do modulo de auditoria
 def modAuditoria():
     opcaoAudVota = menus.menuAudVota()
     match opcaoAudVota:
-        #logs 
+        # Logs 
         case 1:
             os.system('cls')
             funcoesVotacao.exibir_logs()
             input('\nPrecione enter para voltar à tela inicial! ')
-        #protocolos
+        # Protocolos
         case 2:
             os.system('cls')
             funcoesVotacao.exibir_protocolos()
             input('\nPrecione enter para voltar à tela inicial! ')    
-        #voltar
+        # Voltar
         case 3: 
             return
-
+# Funcionamento do modulo de resultado
 def modResultado():
     opcaoResulVota = 0
     while opcaoResulVota != 4:
         opcaoResulVota = menus.menuResulVota()
         opcaoEstats = 0
         match opcaoResulVota:
-            #boletim de urna
+            # Boletim de urna
             case 1:
                 funcoesVotacao.boletim_urna()
                 input('\nPressione Enter para voltar!')
-            #estatísticas
+            # Estatísticas
             case 2:
                 while opcaoEstats != 3:
                     os.system('cls')
@@ -48,38 +48,38 @@ def modResultado():
                 ''')
                     opcaoEstats = int(input('Selecione uma das opções acima: '))
             
-                    #verificação de escolha válida
+                    # Verificação de escolha válida
                     while opcaoEstats not in (1, 2, 3):
                         print('Opção inválida!')
                         opcaoEstats = int(input('Selecione um opção válida: '))
                     match opcaoEstats:
                         case 1:
-                            #estatísticas de comparecimento
+                            # Estatísticas de comparecimento
                             os.system('cls')
                             funcoesVotacao.estatisticas_comparecimento()
                             input('\nPressione Enter para voltar!')
                         case 2:
-                            #votos por partido
+                            # Votos por partido
                             os.system('cls')
                             funcoesVotacao.votor_por_partido()
                             input('\nPressione Enter para voltar!')
                         case 3:
-                            # o return vai fazer voltar para o menu anterior
+                            # O return vai fazer voltar para o menu anterior
                             pass
-            #validar integridade
+            # Validar integridade
             case 3:
                 os.system('cls')
                 funcoesVotacao.validar_integridade()
                 input('\nPressione Enter para voltar!')
             case 4:
                 return
-
+# Funcionamento do modulo de votação
 def modVotacao():
     opcao = 0
     while opcao != 4:
         opcao = menus.menuModVota()
         match opcao:
-            #abrir sistema de votação
+            # Abrir sistema de votação
             case 1:
                 os.system('cls')
                 print('''
@@ -87,24 +87,23 @@ def modVotacao():
         Abrir sistema da votação
     ====================================
                 ''')
-                #verificando validade do título
+                # Verificando validade do título
                 titulo_eleitor = str(input('Informe o título do eleitor: '))
                 while verificacoes.verificarTitulo(titulo_eleitor) == False:
                     print('Título de eleitor inválido!')
                     titulo_eleitor = str(input('Informe seu título de eleitor: '))
-                #verificando validade do cpf
+                # Verificando validade do cpf
                 cpf = str(input("Digite os 4 primeiros dígitos do CPF: "))
                 chave_acesso = str(input('Digite a sua chave de acesso: '))
 
                 funcoesVotacao.sistema_votacao(titulo_eleitor, cpf, chave_acesso)
                 input('Precione enter para voltar à tela inicial! ')
-            #auditoria
+            # Auditoria
             case 2:
                 modAuditoria()
-            #resultado
+            # Resultado
             case 3:
-                
                 modResultado()
-            #voltar
+            # Voltar
             case 4:
                 pass
