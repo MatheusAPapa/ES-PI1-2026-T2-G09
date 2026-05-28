@@ -115,15 +115,18 @@ def deletar_eleitor(cpf, titulo):
     except Exception as e:
         conexaobd.conexao.rollback()
         print(f'Eleitor não encontrado! {e}')
+
 # Essa função pode alterar os dados do eleitor
 def alterar_dados_eleitor(cpf):
+    # Criptografa o CPF para buscar no banco de dados
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
     try:
+        # Busca o nome, numero do titulo, se é mesario, chave de acesso da tabela de eleitores, de acordo com o CPF digitado
         sql_busca = "SELECT nome, numero_titulo, mesario, chave_acesso FROM eleitores WHERE cpf = %s"
         valores = [cpf_criptografado]
         conexaobd.cursor.execute(sql_busca, valores)
         eleitor = conexaobd.cursor.fetchone()
-
+        # se nao encontrado o eleitor pede novamente o CPF
         while eleitor is None:
             os.system('cls')
             print("\n=====================================")
@@ -131,20 +134,22 @@ def alterar_dados_eleitor(cpf):
             print("=====================================\n")
             
             cpf = str(input("Digite o CPF do eleitor: "))
+
+            # Verifica se o CPF é valido, se não for valido ele pede para digitar novamente
             while not verificacoes.verificarCPF(cpf):
                 print('CPF inválido. Digite novamente.')
                 cpf = str(input("Digite o CPF do eleitor: "))
-
+            # Criptografa o CPF para buscar no banco de dados
             cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
             conexaobd.cursor.execute(sql_busca, [cpf_criptografado])
             eleitor = conexaobd.cursor.fetchone()
 
             
-        
+        # Atribuindo dados ao eleitor à variaveis
         nome, numero_titulo, mesario, chave_acesso = eleitor
         
         os.system('cls')
-        
+        # Menu de  opção de edição
         print("\n=====================================")
         print(f"ELEITOR ENCONTRADO: {nome}")
         print("=====================================\n")
@@ -156,67 +161,78 @@ def alterar_dados_eleitor(cpf):
         print("0 - Cancelar")
         opcao = int(input("\nEscolha uma opção: "))
 
+        # Verifica se a opção escolhida existe, se não existir pede para escolher novamente
         while opcao not in [0, 1, 2, 3, 4]:
             print("\n❌ Opção inválida!")
             opcao = int(input("\nEscolha uma opção válida: "))
 
         match opcao:
+            # Sai do meni de edição
             case 0:
                 print("Edição cancelada!")
                 input("Pressione Enter para voltar a tela inicial...")
                 # o return força sair da função
                 return
                 
-
+            # Altera o nome do eleitor
             case 1:        
                 novo_nome = str(input("Informe o novo nome do eleitor: "))
+                # Atualiza no banco de dados
                 sql = "UPDATE eleitores SET nome = %s WHERE cpf = %s"  
                 conexaobd.cursor.execute(sql, [novo_nome, cpf_criptografado])        
-
+            # Altera o numero do titulo do eleitor
             case 2:
                 novo_titulo = str(input("Digite o novo número do título: "))
+                # Verifica se o novo titulo é valido
                 while verificacoes.verificarTitulo(novo_titulo) == False:
                     novo_titulo = str(input("Digite o novo CPF: "))
+                # Atualiza no banco de dados
                 sql = "UPDATE eleitores SET numero_titulo = %s WHERE cpf = %s"
                 conexaobd.cursor.execute(sql, [novo_titulo, cpf_criptografado])      
-
+            # Altera o CPF do eleitor
             case 3:
                 novo_cpf = str(input("Digite o novo CPF: "))
+                # Verifica se o novo CPF é valido
                 while verificacoes.verificarCPF(novo_cpf) == False:
                     novo_cpf = str(input("Digite o novo CPF: "))
                 novo_cpf = criptografia_descriptografia.criptografar(novo_cpf)
+                # Atualiza no banco de dados
                 sql = "UPDATE eleitores SET cpf = %s WHERE cpf = %s"
                 conexaobd.cursor.execute(sql, [novo_cpf, cpf_criptografado])        
-
+            # Altera o status de mesario
             case 4:
                 print("Eleitor é mesário?")
                 print("1 - Sim")
                 print("2 - Não")
                 opcao_mesario = int(input("Escolha: "))
-
+                # Se a opção escolhida não existir ele pede novamente
                 while opcao_mesario not in [1, 2]:  
                     print('Opção inválida!')
                     opcao_mesario = int(input("Escolha: "))
-
+                # 
                 novo_valor = opcao_mesario == 1 
+                # Atualiza no banco de dados
                 sql = "UPDATE eleitores SET mesario = %s WHERE cpf = %s"
                 conexaobd.cursor.execute(sql, [novo_valor, cpf_criptografado])       
                 
 
         conexaobd.conexao.commit()
         
-        #mostrando os dados do eleitor após alteração
+        # Mostrando os dados do eleitor após alteração
         cpf_busca = novo_cpf if opcao == 3 else cpf_criptografado
-        #limpa o cache do cursor, assim mostrando os dados atualizado, não os atingos
+        # Limpa o cache do cursor, assim mostrando os dados atualizado, não os atingos
         conexaobd.cursor = conexaobd.conexao.cursor()
 
+        # Busca o nome, CPF, numero do itulo de eleitor, se é mesario, chave de acesso da tabela de eleitores, de acordo com o CPF inserido, mas com os dados atualizados
         sql_busca = "SELECT nome, cpf, numero_titulo, mesario, chave_acesso FROM eleitores WHERE cpf = %s"
         conexaobd.cursor.execute(sql_busca, [cpf_busca])
         eleitor = conexaobd.cursor.fetchone()
+
+        #  Atribuindo dados ao eleitor à variaveis
         nome, cpf, numero_titulo, mesario, chave_acesso = eleitor 
 
         os.system('cls')
-
+        # Menu de resuldado da edição
         print("\n=====================================")
         print("✅ DADOS ATUALIZADOS COM SUCESSO!")
         print("=====================================\n")
@@ -227,7 +243,7 @@ def alterar_dados_eleitor(cpf):
         print(f"Mesário: {'Sim' if mesario == 1 else 'Não'}")
         input("\nPressione Enter para voltar!")
         funcoesVotacao.registrar_log('Foi alterado os dados de um eleitor.')
-   
+    # Erros de duplicidade
     except mysql.connector.IntegrityError as err:
         if "cpf" in str(err).lower():
             print("\n❌ Erro: Este CPF já está cadastrado no sistema!")
@@ -236,7 +252,7 @@ def alterar_dados_eleitor(cpf):
         else:
             print(f"\n❌ Erro: {err}")
         input('\nPrecione enter para voltar! ')
-
+    # Erros de conexão
     except mysql.connector.Error as err:
         print(f"\n❌ Erro ao editar no banco de dados: {err}")
         input('\nPrecione enter para voltar! ')

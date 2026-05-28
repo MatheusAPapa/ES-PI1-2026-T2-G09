@@ -10,34 +10,35 @@ import criptografia_descriptografia
 escolha = 0
 while escolha != 3:
     escolha = menus.menuInic()
-    #modulo de gerenciamento
+    # Modulo de gerenciamento
     match escolha:
         case 1:
             opcao = 0
             while opcao != 6:
                 opcao = menus.menuModGere()
                 match opcao:
+                    # Cadatrar eleitor
                     case 1:
                         os.system("cls")
                         print("====================================")
                         print("        Cadastrar eleitor")
                         print("====================================\n")
 
-                        #receberá os dados do eleitor
+                        # Receberá os dados do eleitor
                         nome_eleitor = str(input('Informe o nome do eleitor: '))
 
-                        #verificando se o título é válido
+                        # Verificando se o título é válido
                         titulo_eleitor = str(input('Informe o título de eleitor: '))
                         while verificacoes.verificarTitulo(titulo_eleitor) == False:
                             print('Título de eleitor inválido!')
                             titulo_eleitor = str(input('Informe o título de eleitor: '))
 
-                        #verificando se o cpf é válido
+                        # Verificando se o cpf é válido
                         cpf = str(input('Informe o CPF do eleitor: '))
                         while verificacoes.verificarCPF(cpf) == False:
                             cpf = str(input('Informe o CPF do eleitor: '))
 
-                        #verificando possíveis respostas para se o eleitor é mesário
+                        # Verificando possíveis respostas para se o eleitor é mesário
                         mesario = str(input('Informe se o mesário será eleitor [S/N]: '))
                         if mesario in ['s', 'S', 'sim', 'Sim']:
                             mesario = True
@@ -50,7 +51,7 @@ while escolha != 3:
                         #cadastrando o novo eleitor
                         funcoesEleitor.cadastrar_novo_eleitor(nome_eleitor, titulo_eleitor, cpf, mesario)
 
-                    #editar dados do eleitor
+                    # Editar dados do eleitor
                     case 2:
                         cpf = str(input("\nDigite o CPF do eleitor: "))
                         while verificacoes.verificarCPF(cpf) == False:
@@ -58,13 +59,13 @@ while escolha != 3:
                             cpf = str(input("Digite o CPF do eleitor: "))
                         funcoesEleitor.alterar_dados_eleitor(cpf)
 
-                    #listagem de todos os eleitores
+                    # Listagem de todos os eleitores
                     case 3:
                         os.system('cls')
                         funcoesEleitor.listar_eleitores()
                         input('\nPrecione enter para voltar! ')
                     
-                    #fazer uma busca por eleitor
+                    # Fazer uma busca por eleitor
                     case 4:
                         os.system("cls")
                         print("=====================================")
@@ -77,18 +78,18 @@ while escolha != 3:
                         funcoesEleitor.busca_eleitores(cpf)
                         input('\nPrecione enter para voltar! ')
                     
-                    #remover um eleitor
+                    # Remover um eleitor
                     case 5:
                         os.system("cls")
                         print("=====================================")
                         print("        Removendo eleitor")
                         print("=====================================\n")
-                        #validação do cpf
+                        # Validação do cpf
                         cpf = str(input("Digite o CPF do eleitor: "))
                         while verificacoes.verificarCPF(cpf) == False:
                             cpf = str(input('Informe o CPF do eleitor: '))
                         
-                        #validação do titulo de eleitor
+                        # Validação do titulo de eleitor
                         titulo_eleitor = str(input('Informe o título do eleitor: '))
                         while verificacoes.verificarTitulo(titulo_eleitor) == False:
                             print('Título de eleitor inválido!')
@@ -98,13 +99,13 @@ while escolha != 3:
                         input('\nPrecione enter para voltar! ')
                         funcoesVotacao.registrar_log('Um eleitor foi removido do sistema.')
 
-                    #voltar
+                    # Voltar
                     case 6:
                         pass
     
-       #modulo de votação
+        # Modulo de votação
         case 2:
             navegacaoModVotacao.modVotacao()
-
+        # Sair do sistema
         case 3:
             print('Saindo do sistema')

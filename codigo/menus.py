@@ -1,6 +1,6 @@
 import os
 
-#menu inicial
+# Menu inicial
 def menuInic ():
     os.system('cls')
     print('''
@@ -17,13 +17,13 @@ def menuInic ():
     ''')
     escolha = int(input('Qual módulo você deseja entrar? '))
     
-    #verificação de escolha válida
+    # Verificação de escolha válida
     while escolha not in (1, 2, 3):
         print('Opção inválida!')
         escolha = int(input('Selecione um opção válida: '))
     return escolha
 
-#modulo de gerenciamento
+# Modulo de gerenciamento
 def menuModGere ():
     os.system('cls')
     print('''
@@ -43,13 +43,13 @@ def menuModGere ():
     ''')
     opcao = int(input('\nSelecione uma das opções acima: '))
    
-    #verificação de escolha válida
+    # Verificação de escolha válida
     while opcao not in (1, 2, 3, 4, 5, 6):
         print('Opção inválida!')
         opcao = int(input('\nSelecione um opção válida: '))
     return opcao
 
-#modulo de votação
+# Modulo de votação
 def menuModVota ():
     os.system('cls')
     print('''
@@ -67,12 +67,12 @@ def menuModVota ():
     ''')
     opcao = int(input('Selecione uma das opções acima: '))
 
-    #verificação de escolha válida
+    # Verificação de escolha válida
     while opcao not in (1, 2, 3, 4):
         print('Opção inválida!')
         opcao = int(input('Selecione um opção válida: '))
     return opcao
-
+# Modulo de auditoria da votação
 def menuAudVota ():
     os.system('cls')
     print('''
@@ -89,13 +89,13 @@ def menuAudVota ():
     ''')
     opcao = int(input('Selecione uma das opções acima: '))
 
-    #verificação de escolha válida
+    # Verificação de escolha válida
     while opcao not in (1, 2, 3):
         print('Opção inválida!')
         opcao = int(input('Selecione um opção válida: '))
     
     return opcao
-
+# Modul de resultado da votação
 def menuResulVota ():
     os.system('cls')
     print('''
@@ -113,7 +113,7 @@ def menuResulVota ():
     ''')
     opcao = int(input('Selecione uma das opções acima: '))
     
-    #verificação de escolha válida
+    # Verificação de escolha válida
     while opcao not in (1, 2, 3, 4):
         print('Opção inválida!')
         opcao = int(input('Selecione um opção válida: '))
