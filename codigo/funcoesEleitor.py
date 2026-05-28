@@ -7,8 +7,8 @@ import criptografia_descriptografia
 import funcoesVotacao
 import verificacoes
 
+#Gera a chave de acesso a partir do nome do eleitor
 def gerar_chave_acesso(nome):
-    #Gera a chave de acesso a partir do nome do eleitor
 
     #remove os espaços e transforma a string em uma lista
     partes = nome.strip().split()
@@ -22,19 +22,19 @@ def gerar_chave_acesso(nome):
     else:
         segunda_letra = "X"   # caso tenha apenas um nome
     
-    # gera os 4 dígitos aleatórios da chave de acesso
+    # Gera os 4 dígitos aleatórios da chave de acesso
     numeros = ''.join(str(random.randint(1000, 9999)))
-    
+    # Monta a chave, sendo essa: 2 letras do primeiro nome + inicial do segundo + 4 dígitos
     chave = primeiro_nome + segunda_letra + numeros
     return chave
 
+# Cadastra o eleitor no banco e seus dados (nome, titulo, cpf e se será mesário)
 def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
-    # cadastra o eleitor no banco e seus dados (nome, titulo, cpf e se será mesário)
 
-    #gerando a cheve de acesso do eleitor 
+    # Gerando a cheve de acesso do eleitor 
     chave_acesso = gerar_chave_acesso(nome)
 
-     # ✅ Criptografa antes de salvar no banco
+    # ✅ Criptografa antes de salvar no banco
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
     chave_criptografada = criptografia_descriptografia.criptografar(chave_acesso)
 
@@ -44,7 +44,7 @@ def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
         valores = (nome, cpf_criptografado, numero_titulo, mesario, chave_criptografada)
         conexaobd.cursor.execute(sql, valores)
         conexaobd.conexao.commit()
-        
+        # Exibir os dados cadastrados
         print("\n=====================================")
         print("✅ ELEITOR CADASTRADO COM SUCESSO!")
         print("=====================================\n")
@@ -58,56 +58,64 @@ def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
     
     except mysql.connector.IntegrityError as err:
         if "Duplicate entry" in str(err):
-            #verificando duplicidade do cpf
+            # Verificando duplicidade do cpf
             if "cpf" in str(err).lower():
                 print("\n❌ Erro: Este CPF já está cadastrado no sistema!")
                 input("\nPressione Enter para voltar!")
                 
-            #verificando duplicidade de título de eleitor
+            # Verificando duplicidade de título de eleitor
             if "numero_titulo" in str(err).lower():
                 print("\n❌ Erro: Este título de eleitor já está cadastrado no sistema!")
                 input("\nPressione Enter para voltar!")
         else:
             print(f"\n❌ Erro: {err}")
-            
+    # Trata erros genéricos de banco de dados (conexão, sintaxe SQL, etc.)
     except mysql.connector.Error as err:
         print(f"\n❌ Erro ao cadastrar no banco de dados: {err}")
         input('\nPrecione enter para voltar! ')
 
+# Faz a listagem de todos os eleitores cadastrados no banco de dados, mostrando o nome, se é mesário e se já votou
 def listar_eleitores():
-    # faz a listagem de todos os eleitores cadastrados no banco de dados, mostrando o nome, se é mesário e se já votou
-
+    # Busca o nome, status de voto e se é mesario ou não na tabela de eleitores, no banco de dados
     conexaobd.cursor.execute('SELECT nome, mesario, status_de_voto FROM eleitores')
     contador = 0
+    # Faz o print da listagem de todos os eleitores 
     for (nome, mesario, status_de_voto) in conexaobd.cursor.fetchall():
         contador += 1
         print(f'Eleitor {contador} -> Nome: {nome} - Mesario: {'mesario' if mesario == 1 else 'não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
-    
+
+# Essa função busca os dados do eleitor no banco de dados
 def busca_eleitores(cpf):
+    # Criptografa o CPF para buscar no banco de dados
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
-    sql = "SELECT id, nome, mesario, status_de_voto FROM eleitores WHERE cpf=%s"
+    # Busca o nome, se é mesario e o statud de voto do eleitor, cujo o CPF foi digitado
+    sql = "SELECT nome, mesario, status_de_voto FROM eleitores WHERE cpf=%s"
     valores = [cpf_criptografado]
     conexaobd.cursor.execute(sql, valores)
 
     try:
         #fetchone retorna uma tupla com os valores do banco de dados(apenas de uma linha), caso não aja eleitor será retornado None
-        id, nome, mesario, status_de_voto = conexaobd.cursor.fetchone()
-        print(f'\nID: {id} - Nome: {nome} - Mesario: {'Será mesario' if mesario == 1 else 'Não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
+        nome, mesario, status_de_voto = conexaobd.cursor.fetchone()
+        print(f'\nNome: {nome} - Mesario: {'Será mesario' if mesario == 1 else 'Não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
     except:
         print('Eleitor não encontrado!')
 
+# Deleta eleitor do sistema e do banco de dados
 def deletar_eleitor(cpf, titulo):
+    # Criptografia o CPF do eleito para buscar no banco de dados
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
     try:
+        # Deleta só se o CPF e o número do titulo coincidirem
         sql = "DELETE FROM eleitores WHERE cpf=%s and numero_titulo=%s"
         values = (cpf_criptografado, titulo)
         conexaobd.cursor.execute(sql, values)
         conexaobd.conexao.commit()
         print('Eleitor removido com sucesso')
+    # Desfaz a operação em caso de erro para não corromper o banco
     except Exception as e:
         conexaobd.conexao.rollback()
         print(f'Eleitor não encontrado! {e}')
-
+# Essa função pode alterar os dados do eleitor
 def alterar_dados_eleitor(cpf):
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
     try:
