@@ -83,30 +83,54 @@ def listar_eleitores():
         contador += 1
         print(f'Eleitor {contador} -> Nome: {nome} - Mesario: {'mesario' if mesario == 1 else 'não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
     
-def busca_eleitores(cpf):
-    cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
-    sql = "SELECT id, nome, mesario, status_de_voto FROM eleitores WHERE cpf=%s"
-    valores = [cpf_criptografado]
-    conexaobd.cursor.execute(sql, valores)
+def busca_eleitores(busca):
+    match busca:
+        #busca por cpf
+        case 1:
+            cpf = str(input("Digite o CPF do eleitor: "))
+            while verificacoes.verificarCPF(cpf) == False:
+                cpf = str(input('Informe o CPF do eleitor: '))
 
-    try:
-        #fetchone retorna uma tupla com os valores do banco de dados(apenas de uma linha), caso não aja eleitor será retornado None
-        id, nome, mesario, status_de_voto = conexaobd.cursor.fetchone()
-        print(f'\nID: {id} - Nome: {nome} - Mesario: {'Será mesario' if mesario == 1 else 'Não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
-    except:
+            cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
+            sql = "SELECT nome, mesario, status_de_voto FROM eleitores WHERE cpf=%s"
+            valores = [cpf_criptografado]
+            conexaobd.cursor.execute(sql, valores)
+            
+        #busca por título de eleitor
+        case 2:
+            titulo = str(input("Digite o títudo de eleitor: "))
+            while verificacoes.verificarTitulo(titulo) == False:
+                titulo = str(input('Informe o titulo do eleitor: '))
+            
+            sql = "SELECT nome, mesario, status_de_voto FROM eleitores WHERE numero_titulo=%s"
+            valores = [titulo]
+            conexaobd.cursor.execute(sql, valores)
+    # faz o print dos dados do eleitor ou mostra uma mensagem de erro caso esse eleitor não esteja cadastrado
+    eleitor = conexaobd.cursor.fetchone()
+    #fetchone retorna uma tupla com os valores do banco de dados(apenas de uma linha), caso não aja eleitor será retornado None
+    if eleitor is None:
         print('Eleitor não encontrado!')
+        return
+    else:
+        nome, mesario, status_de_voto = eleitor
+        print(f'\nNome: {nome} - Mesario: {'Será mesario' if mesario == 1 else 'Não mesario'} - Status do voto: {'Pendente' if status_de_voto == 0 else 'Votou'}')
 
 def deletar_eleitor(cpf, titulo):
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
-    try:
+
+    sql_busca = "SELECT cpf FROM eleitores WHERE cpf = %s AND numero_titulo = %s"
+    conexaobd.cursor.execute(sql_busca, (cpf_criptografado, titulo))
+
+    if conexaobd.cursor.fetchone() is None:
+        print('Eleitor não encontrado!')
+        return
+
+    else:
         sql = "DELETE FROM eleitores WHERE cpf=%s and numero_titulo=%s"
         values = (cpf_criptografado, titulo)
         conexaobd.cursor.execute(sql, values)
         conexaobd.conexao.commit()
-        print('Eleitor removido com sucesso')
-    except Exception as e:
-        conexaobd.conexao.rollback()
-        print(f'Eleitor não encontrado! {e}')
+        print('Eleitor removido com sucesso!')
 
 def alterar_dados_eleitor(cpf):
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
@@ -168,7 +192,13 @@ def alterar_dados_eleitor(cpf):
             case 2:
                 novo_titulo = str(input("Digite o novo número do título: "))
                 while verificacoes.verificarTitulo(novo_titulo) == False:
-                    novo_titulo = str(input("Digite o novo CPF: "))
+                    novo_titulo = str(input("Digite o novo título de eleitor: "))
+
+                # Verificando se o título de eleitor novo é o mesmo do atual
+                if novo_titulo == numero_titulo:
+                    print("\n⚠️ Este já é o título atual do eleitor!")
+                    input("\nPressione Enter para voltar!")
+                    return
                 sql = "UPDATE eleitores SET numero_titulo = %s WHERE cpf = %s"
                 conexaobd.cursor.execute(sql, [novo_titulo, cpf_criptografado])      
 
@@ -176,7 +206,14 @@ def alterar_dados_eleitor(cpf):
                 novo_cpf = str(input("Digite o novo CPF: "))
                 while verificacoes.verificarCPF(novo_cpf) == False:
                     novo_cpf = str(input("Digite o novo CPF: "))
+
                 novo_cpf = criptografia_descriptografia.criptografar(novo_cpf)
+
+                # Verificando se o cpf novo é o mesmo do atual
+                if novo_cpf == cpf_criptografado:
+                    print("\n⚠️ Este já é o CPF atual do eleitor!")
+                    input("\nPressione Enter para voltar!")
+                    return
                 sql = "UPDATE eleitores SET cpf = %s WHERE cpf = %s"
                 conexaobd.cursor.execute(sql, [novo_cpf, cpf_criptografado])        
 
@@ -190,7 +227,10 @@ def alterar_dados_eleitor(cpf):
                     print('Opção inválida!')
                     opcao_mesario = verificacoes.ler_opcao("Escolha: ")
 
-                novo_valor = opcao_mesario == 1 
+                if opcao_mesario == 1:
+                    novo_valor = True
+                else:
+                    novo_valor = False
                 sql = "UPDATE eleitores SET mesario = %s WHERE cpf = %s"
                 conexaobd.cursor.execute(sql, [novo_valor, cpf_criptografado])       
                 

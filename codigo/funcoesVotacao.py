@@ -194,7 +194,6 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                 #verificando validade do título
                 titulo_eleitor = str(input('Digite seu título de eleitor: '))
                 while verificacoes.verificarTitulo(titulo_eleitor) == False:
-                    print('Título de eleitor inválido!')
                     titulo_eleitor = str(input('Informe o título de eleitor: '))
                 cpf = str(input('Digite os 4 primeiros dígitos do seu CPF: '))
                 chave_acesso = str(input('Digite a sua chave de acesso: '))
@@ -211,8 +210,7 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                     voto = ''
                     while voto.isnumeric() == False:
                         try:
-                            voto = (input('\nDigite o número do candidato para votar: '))
-                            voto = int(voto)
+                            voto = int(input('\nDigite o número do candidato para votar: '))
                             break
                         except ValueError:
                             print('Digite apenas números!')
@@ -268,7 +266,6 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                 while encerrando.lower() in ['n', 'nao', 'não']:
                     titulo_eleitor = str(input('Digite o título de eleitor: '))
                     while verificacoes.verificarTitulo(titulo_eleitor) == False:
-                        print('Título de eleitor inválido!')
                         titulo_eleitor = str(input('Informe o título de eleitor: '))
                     cpf = str(input('Digite os 4 primeiros dígitos do seu CPF: '))
                     chave_acesso = str(input('Digite a sua chave de acesso: '))
@@ -331,11 +328,15 @@ def boletim_urna():
     cursor.execute("""
         SELECT c.nome, c.numero, c.partido, COUNT(v.voto) AS total_votos
         FROM candidatos AS c
-        LEFT JOIN votos AS v ON c.numero = v.voto
+        LEFT JOIN votos AS v 
+        ON c.numero = v.voto
         GROUP BY c.numero, c.nome, c.partido
         ORDER BY c.nome ASC
     """)
     resultados = cursor.fetchall()
+
+    cursor.execute("SELECT COUNT(*) FROM votos WHERE voto IS NULL")
+    votos_nulos = cursor.fetchone()[0]
     
     print('\n======================================')
     print('            Boletim de Urna')
@@ -350,6 +351,7 @@ def boletim_urna():
         if total_votos > max_votos:
             max_votos = total_votos
             vencedor = (nome, numero, partido, total_votos)
+    print(f'  Votos nulos: {votos_nulos} voto(s)')
     if vencedor:
         print(f"\n  Vencedor: {vencedor[0]}")
         print(f"  Numero: {vencedor[1]}  |  Partido: {vencedor[2]}  |  Votos: {vencedor[3]}")

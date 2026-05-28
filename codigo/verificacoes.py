@@ -1,4 +1,9 @@
 def verificarCPF (cpf):
+    #verifica se o cpf foi digitado com  pontuação
+    for i in ['.', ',', '-']:
+        if i in cpf:
+            print('Digite seu CPF sem pontuação!')
+            return False
     #verifica se o cpf tem 11 números
     if len(cpf) != 11:
         print('CPF não possui 11 números!')

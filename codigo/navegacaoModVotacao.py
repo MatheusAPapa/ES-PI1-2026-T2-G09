@@ -4,21 +4,23 @@ import verificacoes
 import os
 
 def modAuditoria():
-    opcaoAudVota = menus.menuAudVota()
-    match opcaoAudVota:
-        #logs 
-        case 1:
-            os.system('cls')
-            funcoesVotacao.exibir_logs()
-            input('\nPrecione enter para voltar à tela inicial! ')
-        #protocolos
-        case 2:
-            os.system('cls')
-            funcoesVotacao.exibir_protocolos()
-            input('\nPrecione enter para voltar à tela inicial! ')    
-        #voltar
-        case 3: 
-            return
+    opcaoAudVota = 0
+    while opcaoAudVota != 3:
+        opcaoAudVota = menus.menuAudVota()
+        match opcaoAudVota:
+            #logs 
+            case 1:
+                os.system('cls')
+                funcoesVotacao.exibir_logs()
+                input('\nPrecione enter para voltar! ')
+            #protocolos
+            case 2:
+                os.system('cls')
+                funcoesVotacao.exibir_protocolos()
+                input('\nPrecione enter para voltar! ')    
+            #voltar
+            case 3: 
+                return
 
 def modResultado():
     opcaoResulVota = 0
@@ -28,6 +30,7 @@ def modResultado():
         match opcaoResulVota:
             #boletim de urna
             case 1:
+                os.system('cls')
                 funcoesVotacao.boletim_urna()
                 input('\nPressione Enter para voltar!')
             #estatísticas
@@ -90,7 +93,6 @@ def modVotacao():
                 #verificando validade do título
                 titulo_eleitor = str(input('Informe o título do eleitor: '))
                 while verificacoes.verificarTitulo(titulo_eleitor) == False:
-                    print('Título de eleitor inválido!')
                     titulo_eleitor = str(input('Informe seu título de eleitor: '))
                 #verificando validade do cpf
                 cpf = str(input("Digite os 4 primeiros dígitos do CPF: "))
