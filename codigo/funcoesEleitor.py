@@ -5,7 +5,6 @@ import verificacoes
 import os
 import criptografia_descriptografia
 import funcoesVotacao
-import verificacoes
 
 #Gera a chave de acesso a partir do nome do eleitor
 def gerar_chave_acesso(nome):
@@ -34,7 +33,7 @@ def cadastrar_novo_eleitor(nome, numero_titulo, cpf, mesario):
     # Gerando a cheve de acesso do eleitor 
     chave_acesso = gerar_chave_acesso(nome)
 
-    # ✅ Criptografa antes de salvar no banco
+    # Criptografa antes de salvar no banco
     cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
     chave_criptografada = criptografia_descriptografia.criptografar(chave_acesso)
 
@@ -88,27 +87,34 @@ def busca_eleitores(busca):
     match busca:
         #busca por cpf
         case 1:
-            cpf = str(input("Digite o CPF do eleitor: "))
+            # pegando os dados do eleitor
+            cpf = str(input("\nDigite o CPF do eleitor: "))
             while verificacoes.verificarCPF(cpf) == False:
                 cpf = str(input('Informe o CPF do eleitor: '))
 
+            #criptografando o cpf para fazer a busca
             cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
+
+            # fazendo a busca do eleitor no banco
             sql = "SELECT nome, mesario, status_de_voto FROM eleitores WHERE cpf=%s"
             valores = [cpf_criptografado]
             conexaobd.cursor.execute(sql, valores)
             
         #busca por título de eleitor
         case 2:
+            # pegando os dados do eleitor
             titulo = str(input("Digite o títudo de eleitor: "))
             while verificacoes.verificarTitulo(titulo) == False:
                 titulo = str(input('Informe o titulo do eleitor: '))
             
+            # fazendo a busca no banco de dados
             sql = "SELECT nome, mesario, status_de_voto FROM eleitores WHERE numero_titulo=%s"
             valores = [titulo]
             conexaobd.cursor.execute(sql, valores)
+
     # faz o print dos dados do eleitor ou mostra uma mensagem de erro caso esse eleitor não esteja cadastrado
     eleitor = conexaobd.cursor.fetchone()
-    #fetchone retorna uma tupla com os valores do banco de dados(apenas de uma linha), caso não aja eleitor será retornado None
+        #fetchone retorna uma tupla com os valores do banco de dados(apenas de uma linha), caso não aja eleitor será retornado None
     if eleitor is None:
         print('Eleitor não encontrado!')
         return
@@ -156,7 +162,6 @@ def alterar_dados_eleitor(cpf):
 
             # Verifica se o CPF é valido, se não for valido ele pede para digitar novamente
             while not verificacoes.verificarCPF(cpf):
-                print('CPF inválido. Digite novamente.')
                 cpf = str(input("Digite o CPF do eleitor: "))
             # Criptografa o CPF para buscar no banco de dados
             cpf_criptografado = criptografia_descriptografia.criptografar(cpf)
@@ -182,7 +187,7 @@ def alterar_dados_eleitor(cpf):
 
         # Verifica se a opção escolhida existe, se não existir pede para escolher novamente
         while opcao not in [0, 1, 2, 3, 4]:
-            print("\n❌ Opção inválida!")
+            print("\nOpção inválida!")
             opcao = verificacoes.ler_opcao("\nEscolha uma opção válida: ")
 
         match opcao:
@@ -234,11 +239,11 @@ def alterar_dados_eleitor(cpf):
                 print("Eleitor é mesário?")
                 print("1 - Sim")
                 print("2 - Não")
-                opcao_mesario = verificacoes.ler_opcao("Escolha: ")
+                opcao_mesario = verificacoes.ler_opcao("Digite sua escolha: ")
 
                 while opcao_mesario not in [1, 2]:  
                     print('Opção inválida!')
-                    opcao_mesario = verificacoes.ler_opcao("Escolha: ")
+                    opcao_mesario = verificacoes.ler_opcao("Digite sua escolha: ")
 
                 if opcao_mesario == 1:
                     novo_valor = True

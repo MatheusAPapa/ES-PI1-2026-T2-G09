@@ -70,7 +70,7 @@ while escolha != 3:
                         print("        Buscar eleitor")
                         print("=====================================\n")
                         print('1 - Buscar por cpf')
-                        print('2 - Buscar por título de eleitor')
+                        print('2 - Buscar por título de eleitor\n')
                         busca = verificacoes.ler_opcao('Digite sua escolha: ')
 
                         funcoesEleitor.busca_eleitores(busca)
@@ -90,7 +90,6 @@ while escolha != 3:
                         # Validação do titulo de eleitor
                         titulo_eleitor = str(input('Informe o título do eleitor: '))
                         while verificacoes.verificarTitulo(titulo_eleitor) == False:
-                            print('Título de eleitor inválido!')
                             titulo_eleitor = str(input('Informe o título de eleitor: '))
 
                         funcoesEleitor.deletar_eleitor(cpf, titulo_eleitor)

@@ -25,12 +25,13 @@ def verificarCPF (cpf):
     for i in range(9):
         soma1 += int(cpf[i]) * contador1
         contador1 -= 1
-    digito1 = (soma1 % 11) % 10
+    digito1 = soma1 % 11
+
     if digito1 >= 2:
         digito1 = 11 - digito1
     else:
         digito1 = 0
-    
+    # verrificando se o 1 dv achado na conta bate com o do cpf informado pelo usuário
     if digito1 != int(cpf[9]):
         print('CPF inválidado')
         return False
@@ -41,17 +42,19 @@ def verificarCPF (cpf):
     for i in range(10):
         soma2 += int(cpf[i]) * contador2
         contador2 -= 1
-    digito2 = (soma2 % 11) % 10
+    digito2 = soma2 % 11
+
     if digito2 >= 2:
         digito2 = 11 - digito2
     else:
         digito2 = 0
-
+    # verrificando se o 2 dv achado na conta bate com o do cpf informado pelo usuário
     if digito2 != int(cpf[10]):
         print('CPF inválidado!')
         return False
     else:
         return True
+    
 # Verifica se numero de titulo do eleitor é valido
 def verificarTitulo (titulo):
     titulo = str(titulo)
