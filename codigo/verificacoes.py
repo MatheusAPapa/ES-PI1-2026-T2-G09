@@ -1,6 +1,11 @@
 # Verifica se o CPF é valido
 def verificarCPF (cpf):
-    # Verifica se o cpf tem 11 números
+    #verifica se o cpf foi digitado com  pontuação
+    for i in ['.', ',', '-']:
+        if i in cpf:
+            print('Digite seu CPF sem pontuação!')
+            return False
+    #verifica se o cpf tem 11 números
     if len(cpf) != 11:
         print('CPF não possui 11 números!')
         return False
@@ -105,3 +110,14 @@ def verificarTitulo (titulo):
     else:
         print('Titulo de eleitor inválido')
         return False
+    
+def ler_opcao (mensagem):
+    #função que faz a leitura da opção de entrar nos menus, ela faz o tratamento de erros que o usuário pode gerar, como digitar letras ou dar enter sem nada escrito, assim evitando o travamento do sistema 
+    opcao = ''
+    while opcao.isnumeric() == False:
+        try: 
+            opcao = int(input(mensagem))
+            return opcao
+        except ValueError: 
+            print('Opção inválida! Digite apenas números')
+            opcao = ''

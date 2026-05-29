@@ -4,22 +4,24 @@ import verificacoes
 import os
 # Funcionamento do modulo de auditoria
 def modAuditoria():
-    opcaoAudVota = menus.menuAudVota()
-    match opcaoAudVota:
-        # Logs 
-        case 1:
-            os.system('cls')
-            funcoesVotacao.exibir_logs()
-            input('\nPrecione enter para voltar à tela inicial! ')
-        # Protocolos
-        case 2:
-            os.system('cls')
-            funcoesVotacao.exibir_protocolos()
-            input('\nPrecione enter para voltar à tela inicial! ')    
-        # Voltar
-        case 3: 
-            return
-# Funcionamento do modulo de resultado
+    opcaoAudVota = 0
+    while opcaoAudVota != 3:
+        opcaoAudVota = menus.menuAudVota()
+        match opcaoAudVota:
+            #logs 
+            case 1:
+                os.system('cls')
+                funcoesVotacao.exibir_logs()
+                input('\nPrecione enter para voltar! ')
+            #protocolos
+            case 2:
+                os.system('cls')
+                funcoesVotacao.exibir_protocolos()
+                input('\nPrecione enter para voltar! ')    
+            #voltar
+            case 3: 
+                return
+
 def modResultado():
     opcaoResulVota = 0
     while opcaoResulVota != 4:
@@ -28,6 +30,7 @@ def modResultado():
         match opcaoResulVota:
             # Boletim de urna
             case 1:
+                os.system('cls')
                 funcoesVotacao.boletim_urna()
                 input('\nPressione Enter para voltar!')
             # Estatísticas
@@ -46,12 +49,12 @@ def modResultado():
     ====================================
           
                 ''')
-                    opcaoEstats = int(input('Selecione uma das opções acima: '))
+                    opcaoEstats = verificacoes.ler_opcao('Selecione uma das opções acima: ')
             
                     # Verificação de escolha válida
                     while opcaoEstats not in (1, 2, 3):
                         print('Opção inválida!')
-                        opcaoEstats = int(input('Selecione um opção válida: '))
+                        opcaoEstats = verificacoes.ler_opcao('Selecione um opção válida: ')
                     match opcaoEstats:
                         case 1:
                             # Estatísticas de comparecimento
@@ -90,7 +93,6 @@ def modVotacao():
                 # Verificando validade do título
                 titulo_eleitor = str(input('Informe o título do eleitor: '))
                 while verificacoes.verificarTitulo(titulo_eleitor) == False:
-                    print('Título de eleitor inválido!')
                     titulo_eleitor = str(input('Informe seu título de eleitor: '))
                 # Verificando validade do cpf
                 cpf = str(input("Digite os 4 primeiros dígitos do CPF: "))

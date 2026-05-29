@@ -30,7 +30,6 @@ while escolha != 3:
                         # Verificando se o título é válido
                         titulo_eleitor = str(input('Informe o título de eleitor: '))
                         while verificacoes.verificarTitulo(titulo_eleitor) == False:
-                            print('Título de eleitor inválido!')
                             titulo_eleitor = str(input('Informe o título de eleitor: '))
 
                         # Verificando se o cpf é válido
@@ -40,13 +39,13 @@ while escolha != 3:
 
                         # Verificando possíveis respostas para se o eleitor é mesário
                         mesario = str(input('Informe se o mesário será eleitor [S/N]: '))
-                        if mesario in ['s', 'S', 'sim', 'Sim']:
-                            mesario = True
-                        elif mesario in ['n', 'N', 'não', 'Não']:
-                            mesario = False
-                        else:
-                            print('Opção inválida para mesário')
+                        while mesario.lower() not in ['s', 'sim', 'n', 'nao', 'não']:
+                            print('Opção inválida!')
                             mesario = str(input('Informe se o mesário será eleitor [S/N]: '))
+                        if mesario in ['s', 'sim']:
+                            mesario = True
+                        else:
+                            mesario = False                             
 
                         #cadastrando o novo eleitor
                         funcoesEleitor.cadastrar_novo_eleitor(nome_eleitor, titulo_eleitor, cpf, mesario)
@@ -55,7 +54,6 @@ while escolha != 3:
                     case 2:
                         cpf = str(input("\nDigite o CPF do eleitor: "))
                         while verificacoes.verificarCPF(cpf) == False:
-                            print('CPF inválido Digite novamente. ')
                             cpf = str(input("Digite o CPF do eleitor: "))
                         funcoesEleitor.alterar_dados_eleitor(cpf)
 
@@ -71,11 +69,11 @@ while escolha != 3:
                         print("=====================================")
                         print("        Buscar eleitor")
                         print("=====================================\n")
-                        cpf = str(input("Digite o CPF do eleitor: "))
-                        while verificacoes.verificarCPF(cpf) == False:
-                            cpf = str(input('Informe o CPF do eleitor: '))
-                        
-                        funcoesEleitor.busca_eleitores(cpf)
+                        print('1 - Buscar por cpf')
+                        print('2 - Buscar por título de eleitor')
+                        busca = verificacoes.ler_opcao('Digite sua escolha: ')
+
+                        funcoesEleitor.busca_eleitores(busca)
                         input('\nPrecione enter para voltar! ')
                     
                     # Remover um eleitor

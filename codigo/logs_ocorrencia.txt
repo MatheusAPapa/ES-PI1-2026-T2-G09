@@ -50,3 +50,35 @@
 2026-05-25 - 11:32:51 -> SUCESSO: Voto registrado com sucesso
 2026-05-25 - 11:33:33 -> SUCESSO: Voto registrado com sucesso
 2026-05-25 - 11:34:16 -> Votação encerrada
+2026-05-28 - 10:44:58 -> Novo eleitor cadastrado.
+2026-05-28 - 10:47:50 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:52:38 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:53:53 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:54:05 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:54:56 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:55:08 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:55:58 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:56:09 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:56:41 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 10:57:51 -> Foi alterado os dados de um eleitor.
+2026-05-28 - 11:03:59 -> Um eleitor foi removido do sistema.
+2026-05-28 - 11:04:52 -> Um eleitor foi removido do sistema.
+2026-05-28 - 11:06:51 -> Novo eleitor cadastrado.
+2026-05-28 - 17:50:55 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 17:51:15 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 17:51:32 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 17:51:46 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 17:53:05 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 17:54:13 -> ABERTURA: Votação iniciada com sucesso. Total de votos zerado.
+2026-05-28 - 17:55:53 -> SUCESSO: Voto registrado com sucesso
+2026-05-28 - 17:56:10 -> ALERTA: Tentativa de voto duplo
+2026-05-28 - 17:57:45 -> SUCESSO: Voto registrado com sucesso
+2026-05-28 - 18:03:45 -> ABERTURA: Votação iniciada com sucesso. Total de votos zerado.
+2026-05-28 - 18:04:44 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 18:04:59 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 18:05:25 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 18:05:47 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 18:06:06 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 18:06:38 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 18:06:48 -> ALERTA: Tentativa de acesso negada
+2026-05-28 - 18:06:56 -> ENCERRAMENTO: Votação finalizada com sucesso.
