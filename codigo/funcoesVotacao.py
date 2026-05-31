@@ -47,7 +47,7 @@ def exibir_protocolos():
     #Função para fazer a listagem dos protocólos de votação
 
     # busca no banco
-    conexaobd.cursor.execute("SELECT protocolo_voto, data_hora FROM votos ORDER BY protocolo_voto ASC")
+    conexaobd.cursor.execute("SELECT protocolo_voto, data_hora FROM votos")
     resultados = conexaobd.cursor.fetchall()
 
     print("\n================================================")
@@ -58,17 +58,20 @@ def exibir_protocolos():
     if not resultados:
         print("Nenhum protocolo registrado.")
     else:
+        #descriptografando os protocolos
+        protocolos = []
+        for (protocolo_cifrado, data_hora) in resultados:
+            #descriptografando o protocolo e salvando na lista
+            protocolo_original = criptografia_descriptografia.descriptografar(protocolo_cifrado).rstrip('A')
+            protocolos.append((protocolo_original, data_hora))
+
+        #ordenando os protocolos 
+        protocolos.sort(key=lambda x: x[0])
+
         # for para o print dos protocolos
-        for i, (protocolo_cifrado, data_hora) in enumerate(resultados):  # ← enumerate aqui
-            try:
-                protocolo_original = criptografia_descriptografia.descriptografar(protocolo_cifrado)
-                #removendo a letra A adicionada na criptografia
-                protocolo_original = protocolo_original.rstrip('A')
-            #proteção contra falha na descriptografia, caso ela falhe não irá travar o sistema
-            except Exception:
-                protocolo_original = protocolo_cifrado
-            #print do protocolo descriptografado
+        for i, (protocolo_original, data_hora) in enumerate(protocolos):
             print(f"{i+1}. Protocolo: {protocolo_original} | Data/Hora: {data_hora}")
+
     
     print("================================================")
 
@@ -298,11 +301,13 @@ def sistema_votacao (titulo_abrindo, cpf_abrindo, chave_acesso_abrindo):
                         while verificacoes.verificarTitulo(titulo_eleitor) == False:
                             titulo_eleitor = str(input('Informe o título de eleitor: '))
                     else:
+                        encerrar = 1
                         break
                     cpf = str(input('Digite os 4 primeiros dígitos do seu CPF: '))
                     chave_acesso = str(input('Digite a sua chave de acesso: '))
 
                     if cpf == '0' or chave_acesso == '0':
+                        encerrar = 1
                         break
                         
                         # buscando no banco o eleito
@@ -384,6 +389,11 @@ def boletim_urna():
     """)
     resultados = cursor.fetchall()
 
+    sql = ("SELECT COUNT(*) FROM votos")
+    cursor.execute(sql)
+    #como o fetchone retorna uma tupla, por isso precisa do [0]
+    total_geral = cursor.fetchone()[0]
+
     #fazendo a contagem dos votos nulos
     cursor.execute("SELECT COUNT(*) FROM votos WHERE voto IS NULL")
     votos_nulos = cursor.fetchone()[0]
@@ -402,7 +412,11 @@ def boletim_urna():
 
     # dando print nos resultados e descobrindo o vencedor
     for nome, numero, partido, total_votos in resultados:
-        print(f"  {nome} (N {numero} - {partido}): {total_votos} voto(s)")
+        if total_geral > 0: 
+            porcentagem = (total_votos / total_geral) * 100 
+        else:
+            porcentagem = 0
+        print(f"  {nome} (N {numero} - {partido}): {total_votos} voto(s) - {porcentagem:.1f}%")
         if total_votos > max_votos:
             max_votos = total_votos
             vencedor = (nome, numero, partido, total_votos)

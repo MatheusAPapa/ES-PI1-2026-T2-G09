@@ -71,3 +71,5 @@ def descriptografar(texto_cifrado):
         resultado += ALFABETO[c1] + ALFABETO[c2]
 
     return resultado
+
+print(descriptografar('XKEASDTM'))

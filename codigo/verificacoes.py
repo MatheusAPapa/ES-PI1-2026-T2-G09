@@ -94,17 +94,13 @@ def verificarTitulo (titulo):
     # Descobrindo o 2º dígito verificador
     soma2 = int(uf[0]) * 7 + int(uf[1]) * 8 + dv1 * 9
     resto2 = soma2 % 11
+
     if resto2 == 10:
         dv2 = 0
-    # Verificando se é de sp ou minas e se o resto da divisão é igual a 0
-    elif uf == '01' or uf == '02':
-        if resto2 == 0:
-            dv2 = 1
-        else:
-            dv2 = resto2
     else:
         dv2 = resto2
-
+    
+    #dv feito achado pela conta
     dv_verificado = str(dv1) + str(dv2)
     
     # Verificação final

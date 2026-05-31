@@ -82,3 +82,28 @@
 2026-05-28 - 18:06:38 -> ALERTA: Tentativa de acesso negada
 2026-05-28 - 18:06:48 -> ALERTA: Tentativa de acesso negada
 2026-05-28 - 18:06:56 -> ENCERRAMENTO: Votação finalizada com sucesso.
+2026-05-30 21:31:12 -> Novo eleitor cadastrado.
+2026-05-30 21:35:40 -> Novo eleitor cadastrado.
+2026-05-30 21:37:21 -> Novo eleitor cadastrado.
+2026-05-30 21:38:29 -> Novo eleitor cadastrado.
+2026-05-30 21:41:37 -> Foi alterado os dados de um eleitor.
+2026-05-30 21:42:34 -> Foi alterado os dados de um eleitor.
+2026-05-30 21:43:10 -> Foi alterado os dados de um eleitor.
+2026-05-30 21:44:30 -> Foi alterado os dados de um eleitor.
+2026-05-30 21:44:41 -> Foi alterado os dados de um eleitor.
+2026-05-30 21:45:27 -> Foi alterado os dados de um eleitor.
+2026-05-30 21:45:51 -> Foi alterado os dados de um eleitor.
+2026-05-30 21:55:15 -> Novo eleitor cadastrado.
+2026-05-30 21:55:35 -> Um eleitor foi removido do sistema.
+2026-05-30 22:07:33 -> ALERTA: Tentativa de acesso negada
+2026-05-30 22:07:59 -> ALERTA: Tentativa de acesso negada
+2026-05-30 22:08:28 -> ALERTA: Tentativa de acesso negada
+2026-05-30 22:09:08 -> ALERTA: Tentativa de acesso negada
+2026-05-30 22:09:23 -> ABERTURA: Votação iniciada com sucesso. Total de votos zerado.
+2026-05-30 22:10:24 -> SUCESSO: Voto registrado com sucesso
+2026-05-30 22:12:19 -> ALERTA: Tentativa de voto duplo
+2026-05-30 22:13:55 -> SUCESSO: Voto registrado com sucesso
+2026-05-30 22:21:28 -> SUCESSO: Voto registrado com sucesso
+2026-05-30 22:22:03 -> SUCESSO: Voto registrado com sucesso
+2026-05-30 22:58:10 -> ABERTURA: Votação iniciada com sucesso. Total de votos zerado.
+2026-05-30 22:58:29 -> ENCERRAMENTO: Votação finalizada com sucesso.

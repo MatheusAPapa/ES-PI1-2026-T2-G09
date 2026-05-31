@@ -26,6 +26,10 @@ while escolha != 3:
 
                         # Receberá os dados do eleitor
                         nome_eleitor = str(input('Informe o nome do eleitor: '))
+                            #impedindo do eleitor colocar um nome vazio
+                        while nome_eleitor == '':
+                            print('Por favor digite se nome!')
+                            nome_eleitor = str(input('Digite seu nome: '))
 
                         # Verificando se o título é válido
                         titulo_eleitor = str(input('Informe o título de eleitor: '))

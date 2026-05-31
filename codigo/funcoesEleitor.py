@@ -103,7 +103,7 @@ def busca_eleitores(busca):
         #busca por título de eleitor
         case 2:
             # pegando os dados do eleitor
-            titulo = str(input("Digite o títudo de eleitor: "))
+            titulo = str(input("\nDigite o títudo de eleitor: "))
             while verificacoes.verificarTitulo(titulo) == False:
                 titulo = str(input('Informe o titulo do eleitor: '))
             
@@ -155,7 +155,7 @@ def alterar_dados_eleitor(cpf):
         while eleitor is None:
             os.system('cls')
             print("\n=====================================")
-            print("❌ ELEITOR NÃO ENCONTRADO!")
+            print("    ELEITOR NÃO ENCONTRADO!")
             print("=====================================\n")
             
             cpf = str(input("Digite o CPF do eleitor: "))
@@ -213,7 +213,7 @@ def alterar_dados_eleitor(cpf):
 
                 # Verificando se o título de eleitor novo é o mesmo do atual
                 if novo_titulo == numero_titulo:
-                    print("\n⚠️ Este já é o título atual do eleitor!")
+                    print("\nEste já é o título atual do eleitor!")
                     input("\nPressione Enter para voltar!")
                     return
                 sql = "UPDATE eleitores SET numero_titulo = %s WHERE cpf = %s"
